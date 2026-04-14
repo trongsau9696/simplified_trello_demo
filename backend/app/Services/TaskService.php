@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Events\TaskCreated as TaskCreatedEvent;
+use App\Events\TaskStatusUpdated;
 use App\Jobs\SendTaskAssigned;
 use App\Models\Project;
 use App\Models\Task;
@@ -24,13 +26,20 @@ class TaskService
             SendTaskAssigned::dispatch($task, $assignee);
         }
 
-        return $task->load(['assignee:id,name,email', 'project:id,name']);
+        $task->load(['assignee:id,name,email', 'project:id,name']);
+
+        // Broadcast real-time event
+        broadcast(new TaskCreatedEvent($task))->toOthers();
+
+        return $task;
     }
 
     public function update(Task $task, array $data): Task
     {
         $oldAssigneeId = $task->assignee_id;
-        $updated       = $this->taskRepository->update($task, $data);
+        $statusChanged = isset($data['status']) && $data['status'] !== $task->status;
+
+        $updated = $this->taskRepository->update($task, $data);
 
         // Notify new assignee if changed
         if (
@@ -41,6 +50,11 @@ class TaskService
             /** @var User $assignee */
             $assignee = User::find($data['assignee_id']);
             SendTaskAssigned::dispatch($updated, $assignee);
+        }
+
+        // Broadcast status change to all project members
+        if ($statusChanged) {
+            broadcast(new TaskStatusUpdated($updated))->toOthers();
         }
 
         return $updated;

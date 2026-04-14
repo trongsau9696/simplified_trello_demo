@@ -7,6 +7,7 @@ import {
 } from '@dnd-kit/core'
 import { useKanban } from '@/hooks/useProject'
 import { useUpdateTaskStatus } from '@/hooks/useTasks'
+import { useProjectChannel } from '@/hooks/useProjectChannel'
 import type { TaskStatus } from '@/types'
 import { KanbanColumn } from './KanbanColumn'
 import styles from './KanbanBoard.module.css'
@@ -25,6 +26,9 @@ interface Props {
 export function KanbanBoard({ projectId, canEdit }: Props) {
   const { data: board, isLoading } = useKanban(projectId)
   const updateStatus = useUpdateTaskStatus(projectId)
+
+  // ─── Subscribe to real-time WebSocket events ──────────
+  useProjectChannel(projectId)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
