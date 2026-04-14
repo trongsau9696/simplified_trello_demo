@@ -1,0 +1,34 @@
+# Laravel
+/backend/.env
+/backend/.env.backup
+/backend/.phpunit.result.cache
+/backend/vendor/
+/backend/storage/*.key
+/backend/storage/logs/*.log
+/backend/storage/framework/cache/
+/backend/storage/framework/sessions/
+/backend/storage/framework/testing/
+/backend/storage/framework/views/
+/backend/bootstrap/cache/*.php
+/backend/public/hot
+/backend/public/storage
+
+# Node / React
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.env
+/frontend/.env.local
+
+# Docker volumes
+mysql_data/
+redis_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

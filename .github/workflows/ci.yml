@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Backend ────────────────────────────────────────────────
+  backend:
+    name: Laravel Tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: trello_test
+        ports: ['3306:3306']
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
+      redis:
+        image: redis:7.2-alpine
+        ports: ['6379:6379']
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, redis, gd, zip
+          coverage: none
+
+      - name: Install Composer deps
+        working-directory: backend
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy .env
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_DATABASE=trello_db/DB_DATABASE=trello_test/' .env
+          sed -i 's/DB_USERNAME=trello_user/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=trello_pass/DB_PASSWORD=secret/' .env
+          sed -i 's/REDIS_HOST=redis/REDIS_HOST=127.0.0.1/' .env
+
+      - name: Generate app key
+        working-directory: backend
+        run: php artisan key:generate
+
+      - name: Run migrations
+        working-directory: backend
+        run: php artisan migrate --force
+
+      - name: Laravel Pint (lint)
+        working-directory: backend
+        run: ./vendor/bin/pint --test
+
+      - name: Larastan (static analysis)
+        working-directory: backend
+        run: ./vendor/bin/phpstan analyse --no-progress
+
+      - name: PHPUnit Tests
+        working-directory: backend
+        run: php artisan test --parallel
+
+  # ─── Frontend ───────────────────────────────────────────────
+  frontend:
+    name: React Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install npm deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: ESLint
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Prettier check
+        working-directory: frontend
+        run: npx prettier --check "src/**/*.{ts,tsx}"
+
+      - name: Vitest
+        working-directory: frontend
+        run: npm run test
