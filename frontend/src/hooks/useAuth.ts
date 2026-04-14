@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authApi } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
+import { useProjectStore } from '@/store/projectStore'
 import toast from 'react-hot-toast'
 
 export function useAuth() {
   const { user, isAuthenticated, setAuth, logout: storeLogout } = useAuthStore()
+  const setActiveProject = useProjectStore(s => s.setActiveProject)
 
   const loginMutation = useMutation({
     mutationFn: authApi.login,
@@ -25,12 +27,17 @@ export function useAuth() {
     },
   })
 
+  const queryClient = useQueryClient()
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
+      queryClient.clear()
+      setActiveProject(null)
       storeLogout()
     },
     onError: () => {
+      queryClient.clear()
+      setActiveProject(null)
       storeLogout()
     },
   })
