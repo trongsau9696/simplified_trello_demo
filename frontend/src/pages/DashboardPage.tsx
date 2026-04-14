@@ -19,8 +19,8 @@ export default function DashboardPage() {
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
-          <div className={styles.logo}>A</div>
-          <span>Antigravity</span>
+          <div className={styles.logo}>T</div>
+          <span>Simplified Trello</span>
         </div>
         
         <nav className={styles.nav}>

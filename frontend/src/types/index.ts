@@ -46,6 +46,7 @@ export interface Task {
   position: number
   due_date?: string
   is_overdue: boolean
+  assignee_id?: number | null
   assignee?: User
   project?: Project
   comments?: Comment[]

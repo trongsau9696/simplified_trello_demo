@@ -36,7 +36,8 @@ export function TaskModal({ taskId, projectId, canEdit: initialCanEdit, onClose 
         description: task.description || '',
         status: task.status,
         priority: task.priority,
-        assignee_id: task.assignee_id,
+        // Fallback to task.assignee.id for robustness
+        assignee_id: task.assignee_id ?? (task.assignee as any)?.id,
         due_date: task.due_date ? task.due_date.split('T')[0] : ''
       })
     }
