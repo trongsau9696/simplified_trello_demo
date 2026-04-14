@@ -62,4 +62,13 @@ class ProjectService
             'completion_rate' => $total > 0 ? round(($done / $total) * 100, 1) : 0,
         ];
     }
+    public function removeMember(Project $project, int $userId): void
+    {
+        // Don't allow removing the owner
+        if ($project->owner_id === $userId) {
+            throw new \InvalidArgumentException("Cannot remove the project owner.");
+        }
+
+        $this->projectRepository->removeMember($project, $userId);
+    }
 }

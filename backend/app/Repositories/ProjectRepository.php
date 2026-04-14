@@ -16,8 +16,11 @@ class ProjectRepository
     {
         return Project::query()
             ->whereHas('members', fn ($q) => $q->where('user_id', $user->id))
-            ->with(['owner:id,name,email'])
-            ->withCount('tasks')
+            ->with(['owner:id,name,email', 'members:id,name'])
+            ->withCount([
+                'tasks',
+                'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done')
+            ])
             ->latest()
             ->cursorPaginate($perPage);
     }
@@ -60,5 +63,10 @@ class ProjectRepository
         $project->members()->syncWithoutDetaching([
             $user->id => ['role' => $role],
         ]);
+    }
+
+    public function removeMember(Project $project, int $userId): void
+    {
+        $project->members()->detach($userId);
     }
 }

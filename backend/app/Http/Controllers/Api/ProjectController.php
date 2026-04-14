@@ -76,6 +76,18 @@ class ProjectController extends Controller
         return response()->json(['message' => "User {$user->name} invited as {$request->role}"], 200);
     }
 
+    public function removeMember(Request $request, Project $project, int $userId): JsonResponse
+    {
+        $this->authorize('invite', $project);
+
+        try {
+            $this->projectService->removeMember($project, $userId);
+            return response()->json(['message' => 'Member removed successfully'], 200);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
+    }
+
     public function stats(Project $project): JsonResponse
     {
         $this->authorize('view', $project);

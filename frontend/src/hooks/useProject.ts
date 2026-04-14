@@ -64,3 +64,41 @@ export function useDeleteProject() {
     },
   })
 }
+export function useUpdateProject(id: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { name?: string; description?: string }) => projectApi.update(id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['projects', id] })
+      qc.invalidateQueries({ queryKey: ['projects'] })
+      toast.success('Project updated!')
+    },
+  })
+}
+
+export function useInviteMember(projectId: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { email: string; role: string }) => projectApi.invite(projectId, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['projects', projectId] })
+      toast.success('Member invited successfully!')
+    },
+  })
+}
+
+export function useRemoveMember(projectId: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (userId: number) => projectApi.removeMember(projectId, userId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['projects', projectId] })
+      toast.success('Member removed')
+    },
+    onError: (err: any) => {
+      const msg = err.response?.data?.message || 'Failed to remove member'
+      toast.error(msg)
+    }
+  })
+}
+

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { taskApi } from '@/api/projects'
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import { taskApi, commentApi } from '@/api/projects'
 import type { KanbanBoard, Task, TaskStatus } from '@/types'
 import toast from 'react-hot-toast'
 
@@ -69,6 +69,51 @@ export function useDeleteTask(projectId: number) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['projects', projectId, 'kanban'] })
       toast.success('Task deleted')
+    },
+    onError: (err: any) => {
+      const msg = err.response?.data?.message || 'Failed to delete task'
+      toast.error(msg)
+    }
+  })
+}
+
+// ─── Modal Specific Hooks ──────────────────────────────────
+
+export function useTask(taskId: number | null) {
+  return useQuery({
+    queryKey: ['tasks', taskId],
+    queryFn: () => taskApi.get(taskId!),
+    enabled: !!taskId,
+  })
+}
+
+export function useUpdateTask(projectId: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Partial<Task> }) => taskApi.update(id, data),
+    onSuccess: (_, variables) => {
+      qc.invalidateQueries({ queryKey: ['tasks', variables.id] })
+      qc.invalidateQueries({ queryKey: ['projects', projectId, 'kanban'] })
+      toast.success('Task updated')
+    },
+  })
+}
+
+export function useComments(taskId: number | null) {
+  return useQuery({
+    queryKey: ['tasks', taskId, 'comments'],
+    queryFn: () => commentApi.list(taskId!),
+    enabled: !!taskId,
+  })
+}
+
+export function useAddComment(taskId: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: string) => commentApi.create(taskId, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['tasks', taskId, 'comments'] })
+      toast.success('Comment added')
     },
   })
 }

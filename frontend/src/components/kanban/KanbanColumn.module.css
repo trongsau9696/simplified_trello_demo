@@ -37,20 +37,106 @@
 }
 
 .tasks {
-  flex: 1; padding: 0.5rem;
-  display: flex; flex-direction: column; gap: 0.5rem;
+  flex: 1; 
+  padding: 0.5rem 0.5rem 2rem;
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.75rem;
   overflow-y: auto;
+  min-height: 100px;
 }
 
 .empty { color: var(--text-muted); text-align: center; padding: 2rem 1rem; font-size: 0.875rem; }
 
 .addBtn {
-  margin: 0.5rem; padding: 0.5rem;
-  background: transparent;
-  border: 1px dashed var(--border);
+  margin: 0.5rem 0.75rem 0.25rem;
+  padding: 0.6rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text-muted);
-  cursor: pointer; font-size: 0.875rem;
-  transition: all 0.2s;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.addBtn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+
+.addBtn:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.addBtn:active {
+  transform: translateY(0);
+}
+
+.addForm {
+  margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.addInput {
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  min-height: 60px;
+  resize: vertical;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  outline: none;
+  font-family: inherit;
+}
+
+.addActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submitAddBtn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.submitAddBtn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.submitAddBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancelAddBtn {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.cancelAddBtn:hover {
+  color: var(--danger);
+}

@@ -20,6 +20,7 @@ class ProjectResource extends JsonResource
             'owner'       => new UserResource($this->whenLoaded('owner')),
             'members'     => UserResource::collection($this->whenLoaded('members')),
             'tasks_count' => $this->whenCounted('tasks'),
+            'done_tasks_count' => $this->done_tasks_count,
             'my_role'     => $this->when(
                 $request->user() !== null,
                 fn () => $this->getRoleForUser($request->user())

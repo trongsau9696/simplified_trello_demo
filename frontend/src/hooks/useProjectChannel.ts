@@ -42,6 +42,20 @@ export function useProjectChannel(projectId: number): void {
       toast.success(`New task: "${event.title}"`, { icon: '📋' })
     })
 
+    // ─── task.deleted ─────────────────────────────────────
+    channel.listen('.task.deleted', (event: { id: number }) => {
+      qc.setQueryData<KanbanBoard>(['projects', projectId, 'kanban'], old => {
+        if (!old) return old
+        const removeFrom = (arr: Task[]) => arr.filter(t => t.id !== event.id)
+        return {
+          todo:        removeFrom(old.todo),
+          in_progress: removeFrom(old.in_progress),
+          done:        removeFrom(old.done),
+        }
+      })
+      toast('Task was deleted by another user')
+    })
+
     return () => {
       echo.leaveChannel(`project.${projectId}`)
     }

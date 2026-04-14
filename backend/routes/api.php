@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Projects
     Route::apiResource('projects', ProjectController::class);
     Route::post('projects/{project}/invite', [ProjectController::class, 'invite']);
+    Route::delete('projects/{project}/members/{user}', [ProjectController::class, 'removeMember']);
     Route::get('projects/{project}/stats',   [ProjectController::class, 'stats']);
     Route::get('projects/{project}/report/pdf', [ReportController::class, 'projectPdf']);
 

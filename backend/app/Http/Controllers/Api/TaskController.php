@@ -63,7 +63,7 @@ class TaskController extends Controller
     {
         $this->authorize('view', $task);
 
-        $task->load(['assignee', 'project', 'comments.user']);
+        $task->load(['assignee', 'project.owner', 'comments.user']);
 
         return new TaskResource($task);
     }

@@ -1,10 +1,40 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { useProject, useProjectStats } from '@/hooks/useProject'
+import { useProject, useProjectStats, useRemoveMember } from '@/hooks/useProject'
 import { useAuthStore } from '@/store/authStore'
 import { KanbanBoard } from '@/components/kanban/KanbanBoard'
 import { SkeletonPage } from '@/components/ui/SkeletonLoader'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { EditProjectModal } from '@/components/project/EditProjectModal'
+import { InviteMemberModal } from '@/components/project/InviteMemberModal'
 import styles from './ProjectDetailPage.module.css'
+
+function MemberList({ members, isOwner, onRemove }: { members: any[], isOwner: boolean, onRemove: (id: number) => void }) {
+  const handleRemove = (member: any) => {
+    if (!isOwner) return
+    if (confirm(`Remove ${member.name} from project?`)) {
+      onRemove(member.id)
+    }
+  }
+
+  return (
+    <div className={styles.memberList}>
+      {members.slice(0, 5).map(m => (
+        <span 
+          key={m.id} 
+          className={`${styles.memberAvatar} ${isOwner ? styles.clickable : ''}`} 
+          title={isOwner ? `Remove ${m.name}` : m.name}
+          onClick={() => handleRemove(m)}
+        >
+          {m.name[0]}
+        </span>
+      ))}
+      {members.length > 5 && (
+        <span className={styles.memberAvatarMore}>+{members.length - 5}</span>
+      )}
+    </div>
+  )
+}
 
 function ExportPdfButton({ projectId }: { projectId: number }) {
   const token = useAuthStore(s => s.token)
@@ -32,22 +62,47 @@ function ExportPdfButton({ projectId }: { projectId: number }) {
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
   const projectId = Number(id)
-  const user = useAuthStore(s => s.user)
+  const [isEditingProject, setIsEditingProject] = useState(false)
+  const [isInvitingMember, setIsInvitingMember] = useState(false)
 
   const { data: project, isLoading } = useProject(projectId)
   const { data: stats } = useProjectStats(projectId)
+  const removeMember = useRemoveMember(projectId)
 
   if (isLoading) return <SkeletonPage />
   if (!project) return <div>Project not found</div>
 
   const canEdit = project.my_role === 'owner' || project.my_role === 'editor'
+  const isOwner = project.my_role === 'owner'
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <div>
+        <div className={styles.titleInfo}>
           <Link to="/dashboard" className={styles.back}>← Back</Link>
-          <h1 className={styles.title}>{project.name}</h1>
+          <div className={styles.titleRow}>
+            <h1 className={styles.title}>{project.name}</h1>
+            {canEdit && (
+              <button 
+                className={styles.editIconBtn} 
+                onClick={() => setIsEditingProject(true)}
+                title="Edit Project Details"
+              >
+                ✏️
+              </button>
+            )}
+            <div className={styles.titleDivider} />
+            <MemberList 
+              members={project.members || []} 
+              isOwner={isOwner} 
+              onRemove={(uid) => removeMember.mutate(uid)} 
+            />
+            {isOwner && (
+              <button className={styles.inviteBtn} onClick={() => setIsInvitingMember(true)}>
+                + Invite
+              </button>
+            )}
+          </div>
           {project.description && <p className={styles.desc}>{project.description}</p>}
         </div>
         <div className={styles.badges}>
@@ -59,6 +114,14 @@ export default function ProjectDetailPage() {
           <ExportPdfButton projectId={projectId} />
         </div>
       </header>
+
+      {isEditingProject && (
+        <EditProjectModal project={project} onClose={() => setIsEditingProject(false)} />
+      )}
+
+      {isInvitingMember && (
+        <InviteMemberModal projectId={projectId} onClose={() => setIsInvitingMember(false)} />
+      )}
 
       {stats && (
         <div className={styles.statsRow}>

@@ -38,6 +38,25 @@ services:
       - app
       - redis
 
+  # ─── Reverb WebSockets ────────────────────────────────────
+  reverb:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: trello_reverb
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080 --no-interaction
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - trello_network
+    depends_on:
+      - app
+      - redis
+
   # ─── Nginx ────────────────────────────────────────────────
   nginx:
     image: nginx:1.25-alpine
