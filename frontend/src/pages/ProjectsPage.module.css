@@ -1,9 +1,12 @@
-.page { background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; font-family: 'Inter', system-ui, sans-serif; }
+.page { background: var(--bg); min-height: 100vh; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
-.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem; margin-bottom: 0; border-bottom: 1px solid var(--border); background: var(--bg-secondary); }
 .header h1 { font-size: 1.875rem; font-weight: 700; margin: 0; color: var(--text); }
+.headerActions { display: flex; align-items: center; gap: 0.75rem; }
 .back { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 0.25rem; }
 .back:hover { color: var(--accent); }
+
+.content { padding: 1.5rem; }
 
 .newBtn {
   padding: 0.6rem 1.25rem;

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 import { projectApi } from '@/api/projects'
 import toast from 'react-hot-toast'
 
@@ -6,6 +6,15 @@ export function useProjects() {
   return useQuery({
     queryKey: ['projects'],
     queryFn: () => projectApi.list(),
+  })
+}
+
+export function useInfiniteProjects() {
+  return useInfiniteQuery({
+    queryKey: ['projects', 'infinite'],
+    queryFn: ({ pageParam }: { pageParam?: string }) => projectApi.list(pageParam),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: lastPage => lastPage.next_cursor ?? undefined,
   })
 }
 
