@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('projects', ProjectController::class);
     Route::post('projects/{project}/invite', [ProjectController::class, 'invite']);
     Route::get('projects/{project}/stats',   [ProjectController::class, 'stats']);
+    Route::get('projects/{project}/report/pdf', [ReportController::class, 'projectPdf']);
 
     // Tasks
     Route::get('projects/{project}/tasks',        [TaskController::class, 'index']);

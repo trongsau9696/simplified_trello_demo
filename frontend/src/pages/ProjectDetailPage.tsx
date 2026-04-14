@@ -3,8 +3,31 @@ import { useProject, useProjectStats } from '@/hooks/useProject'
 import { useAuthStore } from '@/store/authStore'
 import { KanbanBoard } from '@/components/kanban/KanbanBoard'
 import { SkeletonPage } from '@/components/ui/SkeletonLoader'
-import { RadialBarChart, RadialBar, ResponsiveContainer, Tooltip } from 'recharts'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import styles from './ProjectDetailPage.module.css'
+
+function ExportPdfButton({ projectId }: { projectId: number }) {
+  const token = useAuthStore(s => s.token)
+
+  const handleExport = async () => {
+    const res = await fetch(`/api/projects/${projectId}/report/pdf`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/pdf' },
+    })
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `project-${projectId}-report.pdf`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  return (
+    <button className={styles.exportBtn} onClick={handleExport} aria-label="Export project report as PDF">
+      📄 Export PDF
+    </button>
+  )
+}
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -19,12 +42,6 @@ export default function ProjectDetailPage() {
 
   const canEdit = project.my_role === 'owner' || project.my_role === 'editor'
 
-  const chartData = stats ? [
-    { name: 'Done',        value: stats.done,        fill: '#10b981' },
-    { name: 'In Progress', value: stats.in_progress,  fill: '#f59e0b' },
-    { name: 'Todo',        value: stats.todo,         fill: '#6366f1' },
-  ] : []
-
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -34,10 +51,12 @@ export default function ProjectDetailPage() {
           {project.description && <p className={styles.desc}>{project.description}</p>}
         </div>
         <div className={styles.badges}>
+          <ThemeToggle />
           <span className={styles.role}>{project.my_role}</span>
           {stats && (
             <span className={styles.completion}>{stats.completion_rate}% complete</span>
           )}
+          <ExportPdfButton projectId={projectId} />
         </div>
       </header>
 
