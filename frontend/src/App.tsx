@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AppRouter } from '@/router'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { useThemeStore } from '@/store/themeStore'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,6 +16,11 @@ const queryClient = new QueryClient({
 })
 
 function App() {
+  const isDark = useThemeStore(s => s.isDark)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

@@ -3,19 +3,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at top, #0f1729 0%, #060b14 100%);
+  background: radial-gradient(ellipse at top, var(--bg-secondary) 0%, var(--bg) 100%);
   padding: 1rem;
 }
 
 .card {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid #1e293b;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
   backdrop-filter: blur(12px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
 .logo { font-size: 2.5rem; text-align: center; margin-bottom: 1rem; }
@@ -24,13 +24,13 @@
   text-align: center;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin: 0 0 0.25rem;
 }
 
 .subtitle {
   text-align: center;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.875rem;
   margin: 0 0 2rem;
 }
@@ -39,29 +39,31 @@
 
 .field { display: flex; flex-direction: column; gap: 0.35rem; }
 
-.field label { font-size: 0.8rem; color: #94a3b8; font-weight: 500; }
+.field label { font-size: 0.8rem; color: var(--text-subtle); font-weight: 500; }
 
 .field input {
   padding: 0.65rem 0.875rem;
-  background: #0f172a;
-  border: 1px solid #1e293b;
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: #f1f5f9;
+  color: var(--text);
   font-size: 0.9rem;
   transition: border-color 0.2s;
 }
 
 .field input:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
-.error { font-size: 0.75rem; color: #ef4444; }
+.field input::placeholder { color: var(--text-muted); }
+
+.error { font-size: 0.75rem; color: var(--danger); }
 
 .btn {
   padding: 0.75rem;
-  background: #6366f1;
+  background: var(--accent);
   color: white;
   border: none;
   border-radius: 8px;
@@ -72,15 +74,15 @@
   transition: background 0.2s, transform 0.1s;
 }
 
-.btn:hover:not(:disabled) { background: #4f46e5; transform: translateY(-1px); }
+.btn:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .link {
   text-align: center;
   margin: 1.25rem 0 0;
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
-.link a { color: #6366f1; text-decoration: none; font-weight: 500; }
+.link a { color: var(--accent); text-decoration: none; font-weight: 500; }
 .link a:hover { text-decoration: underline; }

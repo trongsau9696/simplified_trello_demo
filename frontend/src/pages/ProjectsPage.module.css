@@ -1,79 +1,71 @@
-.page { background: #060b14; min-height: 100vh; color: #e2e8f0; padding: 2rem; font-family: 'Inter', system-ui, sans-serif; }
+.page { background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; font-family: 'Inter', system-ui, sans-serif; }
 
 .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
-.header h1 { font-size: 1.875rem; font-weight: 700; margin: 0; }
-.back { color: #64748b; text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 0.25rem; }
-.back:hover { color: #6366f1; }
+.header h1 { font-size: 1.875rem; font-weight: 700; margin: 0; color: var(--text); }
+.back { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 0.25rem; }
+.back:hover { color: var(--accent); }
 
 .newBtn {
   padding: 0.6rem 1.25rem;
-  background: #6366f1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
+  background: var(--accent); color: white;
+  border: none; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 600; cursor: pointer;
   transition: background 0.2s;
 }
-.newBtn:hover { background: #4f46e5; }
+.newBtn:hover { background: var(--accent-hover); }
 
 .form {
-  background: #1e293b;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: 1.5rem; margin-bottom: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
 }
 
 .input, .textarea {
   padding: 0.65rem 0.875rem;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: #f1f5f9;
-  font-size: 0.9rem;
-  font-family: inherit;
-  resize: vertical;
+  color: var(--text);
+  font-size: 0.9rem; font-family: inherit; resize: vertical;
+  transition: border-color 0.2s;
 }
-
-.input:focus, .textarea:focus { outline: none; border-color: #6366f1; }
-.err { color: #ef4444; font-size: 0.75rem; }
+.input:focus, .textarea:focus { outline: none; border-color: var(--accent); }
+.input::placeholder, .textarea::placeholder { color: var(--text-muted); }
+.err { color: var(--danger); font-size: 0.75rem; }
 
 .submitBtn {
-  align-self: flex-start;
-  padding: 0.6rem 1.25rem;
-  background: #10b981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
+  align-self: flex-start; padding: 0.6rem 1.25rem;
+  background: var(--success); color: white;
+  border: none; border-radius: 8px; cursor: pointer;
+  font-size: 0.875rem; font-weight: 600;
+  transition: opacity 0.2s;
 }
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
 
 .card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; position: relative;
   transition: border-color 0.2s, transform 0.2s;
 }
-.card:hover { border-color: #6366f1; transform: translateY(-2px); }
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
 
 .cardLink { display: block; padding: 1.25rem; text-decoration: none; color: inherit; }
-.cardLink h3 { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; color: #f1f5f9; }
-.cardLink p { margin: 0 0 1rem; font-size: 0.8rem; color: #64748b; }
+.cardLink h3 { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; color: var(--text); }
+.cardLink p { margin: 0 0 1rem; font-size: 0.8rem; color: var(--text-muted); }
 
-.meta { display: flex; gap: 0.75rem; font-size: 0.75rem; color: #475569; }
-.role { background: #1e3a5f; color: #6366f1; padding: 2px 8px; border-radius: 999px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
+.meta { display: flex; gap: 0.75rem; font-size: 0.75rem; color: var(--text-muted); }
+.role {
+  background: rgba(99, 102, 241, 0.15); color: var(--accent);
+  padding: 2px 8px; border-radius: 999px;
+  font-weight: 600; text-transform: uppercase; font-size: 0.7rem;
+}
 
 .deleteBtn { position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; cursor: pointer; font-size: 1rem; opacity: 0.4; transition: opacity 0.2s; }
 .deleteBtn:hover { opacity: 1; }
 
-.empty { color: #475569; text-align: center; padding: 3rem; }
+.empty { color: var(--text-muted); text-align: center; padding: 3rem; }

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { RadialBar, RadialBarChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { useProjects } from '@/hooks/useProject'
 import { useAuthStore } from '@/store/authStore'
 import { useAuth } from '@/hooks/useAuth'
 import { SkeletonCard } from '@/components/ui/SkeletonLoader'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import styles from './DashboardPage.module.css'
 
 export default function DashboardPage() {
@@ -22,6 +22,7 @@ export default function DashboardPage() {
           <Link to="/projects"  className={styles.navItem}>📁 Projects</Link>
         </nav>
         <div className={styles.userSection}>
+          <ThemeToggle />
           <span className={styles.avatar}>{user?.name[0]}</span>
           <div>
             <p className={styles.userName}>{user?.name}</p>
