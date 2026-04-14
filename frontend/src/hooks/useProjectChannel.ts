@@ -14,7 +14,7 @@ export function useProjectChannel(projectId: number): void {
   useEffect(() => {
     if (!projectId) return
 
-    const channel = echo.channel(`project.${projectId}`)
+    const channel = echo.private(`project.${projectId}`)
 
     // ─── task.status.updated ──────────────────────────────
     channel.listen('.task.status.updated', (event: Pick<Task, 'id' | 'status' | 'position'>) => {

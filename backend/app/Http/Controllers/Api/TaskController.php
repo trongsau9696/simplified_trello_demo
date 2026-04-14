@@ -49,7 +49,7 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request, Project $project): JsonResponse
     {
-        $this->authorize('view', $project);
+        $this->authorize('update', $project);
 
         $task = $this->taskService->create($project, $request->validated(), $request->user());
 

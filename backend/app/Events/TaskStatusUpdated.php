@@ -4,7 +4,7 @@ namespace App\Events;
 
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
-use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -18,9 +18,9 @@ class TaskStatusUpdated implements ShouldBroadcast
         public readonly Task $task,
     ) {}
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): PrivateChannel
     {
-        return new Channel("project.{$this->task->project_id}");
+        return new PrivateChannel("project.{$this->task->project_id}");
     }
 
     public function broadcastAs(): string

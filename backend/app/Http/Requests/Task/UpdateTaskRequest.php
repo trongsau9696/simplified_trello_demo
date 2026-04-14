@@ -20,7 +20,7 @@ class UpdateTaskRequest extends FormRequest
             'status'      => ['nullable', 'in:todo,in_progress,done'],
             'priority'    => ['nullable', 'in:low,medium,high'],
             'assignee_id' => ['nullable', 'exists:users,id'],
-            'due_date'    => ['nullable', 'date'],
+            'due_date'    => ['nullable', 'date', 'after_or_equal:today'],
             'position'    => ['nullable', 'integer', 'min:0'],
         ];
     }

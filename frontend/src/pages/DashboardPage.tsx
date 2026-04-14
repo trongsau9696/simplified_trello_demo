@@ -60,7 +60,7 @@ export default function DashboardPage() {
       <main className={styles.main}>
         <header className={styles.hero}>
           <div className={styles.heroContent}>
-            <h1>Welcome back, {user?.name.split(' ')[0]}! 👋</h1>
+            <h1>Welcome back, {(user?.name || 'User').split(' ')[0]}! 👋</h1>
             <p>You have {projects.length} active projects and {totalTasks} tasks to manage today.</p>
             <div className={styles.heroActions}>
               <Link to="/projects" className={styles.primaryBtn}>Manage Projects</Link>
