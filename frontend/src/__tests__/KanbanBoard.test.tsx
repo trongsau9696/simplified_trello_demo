@@ -17,7 +17,7 @@ describe('KanbanBoard', () => {
     render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <KanbanBoard projectId={1} canEdit={true} />
+          <KanbanBoard projectId={1} canEdit={true} members={[]} />
         </QueryClientProvider>
       </BrowserRouter>
     )

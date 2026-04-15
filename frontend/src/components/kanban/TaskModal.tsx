@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTask, useUpdateTask, useAddComment, useComments, useDeleteTask } from '@/hooks/useTasks'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import type { TaskStatus, TaskPriority, User } from '@/types'
 import styles from './TaskModal.module.css'
 
@@ -13,6 +14,7 @@ interface TaskModalProps {
 }
 
 export function TaskModal({ taskId, projectId, onClose, members, canEdit }: TaskModalProps) {
+  const { t } = useTranslation()
   const { data: task, isLoading } = useTask(taskId)
   const { data: comments } = useComments(taskId)
   const updateTask = useUpdateTask(projectId)
@@ -35,7 +37,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
       setDescription(task.description || '')
       setStatus(task.status)
       setPriority(task.priority)
-      setAssigneeId(task.assignee_id)
+      setAssigneeId(task.assignee_id ?? null)
       setDueDate(task.due_date ? task.due_date.split('T')[0] : '')
     }
   }, [task])
@@ -44,7 +46,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
     return (
       <div className={styles.backdrop} onClick={onClose}>
         <div className={styles.modal} onClick={e => e.stopPropagation()}>
-          <div className={styles.loading}>Loading task details...</div>
+          <div className={styles.loading}>{t('kanban.loading')}</div>
         </div>
       </div>
     )
@@ -58,7 +60,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
         status,
         priority,
         assignee_id: assigneeId,
-        due_date: dueDate || null,
+        due_date: dueDate || undefined,
       },
     })
     setIsEditing(false)
@@ -85,9 +87,15 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
   }
 
   const statusLabels: Record<TaskStatus, string> = {
-    todo: 'To Do',
-    in_progress: 'In Progress',
-    done: 'Done',
+    todo: t('kanban.todo'),
+    in_progress: t('kanban.inProgress'),
+    done: t('kanban.done'),
+  }
+
+  const priorityLabels: Record<TaskPriority, string> = {
+    low: t('kanban.low'),
+    medium: t('kanban.medium'),
+    high: t('kanban.high'),
   }
 
   return (
@@ -105,7 +113,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                   className={styles.titleInput}
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  placeholder="Task title"
+                  placeholder={t('kanban.title')}
                   autoFocus
                 />
               </div>
@@ -116,7 +124,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <div className={styles.headerActions}>
               {canEdit && !isEditing && (
                 <button className={styles.editBtnMain} onClick={() => setIsEditing(true)}>
-                  ✏️ Edit Task
+                  ✏️ {t('kanban.editTask')}
                 </button>
               )}
               {isEditing && (
@@ -126,10 +134,10 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                     onClick={handleSave}
                     disabled={updateTask.isPending}
                   >
-                    {updateTask.isPending ? 'Saving...' : 'Save Changes'}
+                    {updateTask.isPending ? t('kanban.saving') : t('kanban.save')}
                   </button>
                   <button className={styles.btnCancel} onClick={() => setIsEditing(false)}>
-                    Cancel
+                    {t('kanban.cancel')}
                   </button>
                 </div>
               )}
@@ -152,7 +160,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
         <div className={styles.body}>
           <div className={styles.mainCol}>
             <section className={styles.section}>
-              <h3>Description</h3>
+              <h3>{t('kanban.description')}</h3>
               {isEditing ? (
                 <textarea
                   className={styles.descInput}
@@ -165,31 +173,31 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                   {task.description ? (
                     <p className={styles.descriptionText}>{task.description}</p>
                   ) : (
-                    <p className={styles.placeholderLabel}>No description provided.</p>
+                    <p className={styles.placeholderLabel}>{t('kanban.noDescription')}</p>
                   )}
                 </div>
               )}
             </section>
 
             <section className={styles.section}>
-              <h3>Activity</h3>
+              <h3>{t('kanban.activity')}</h3>
               <form className={styles.commentForm} onSubmit={handleAddComment}>
                 <input
                   className={styles.commentInput}
                   value={commentText}
                   onChange={e => setCommentText(e.target.value)}
-                  placeholder="Write a comment..."
+                  placeholder={t('kanban.writeComment')}
                 />
                 <button
                   className={styles.btnPrimary}
                   disabled={!commentText.trim() || addComment.isPending}
                 >
-                  Send
+                  {t('kanban.send')}
                 </button>
               </form>
 
               <div className={styles.commentsList}>
-                {comments?.map(comment => (
+                {comments?.map((comment: any) => (
                   <div key={comment.id} className={styles.comment}>
                     <div className={styles.commentHeader}>
                       <strong>{comment.user?.name}</strong>
@@ -204,14 +212,14 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
 
           <aside className={styles.sidebar}>
             <div className={styles.widget}>
-              <h4>Assignee</h4>
+              <h4>{t('kanban.assignee')}</h4>
               {isEditing ? (
                 <select
                   className={styles.select}
                   value={assigneeId || ''}
                   onChange={e => setAssigneeId(Number(e.target.value) || null)}
                 >
-                  <option value="">Unassigned</option>
+                  <option value="">{t('kanban.unassigned')}</option>
                   {(members || []).map(m => (
                     <option key={m.id} value={m.id}>
                       {m.name}
@@ -226,35 +234,35 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                       <span className={styles.sideValue}>{task.assignee.name}</span>
                     </>
                   ) : (
-                    <span className={styles.placeholderLabel}>Unassigned</span>
+                    <span className={styles.placeholderLabel}>{t('kanban.unassigned')}</span>
                   )}
                 </div>
               )}
             </div>
 
             <div className={styles.widget}>
-              <h4>Priority</h4>
+              <h4>{t('kanban.priority')}</h4>
               {isEditing ? (
                 <select
                   className={styles.select}
                   value={priority}
                   onChange={e => setPriority(e.target.value as TaskPriority)}
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="low">{t('kanban.low')}</option>
+                  <option value="medium">{t('kanban.medium')}</option>
+                  <option value="high">{t('kanban.high')}</option>
                 </select>
               ) : (
                 <span
                   className={`${styles.sideValue} ${styles.capitalize} ${getPriorityClass(task.priority)}`}
                 >
-                  {task.priority}
+                  {priorityLabels[task.priority]}
                 </span>
               )}
             </div>
 
             <div className={styles.widget}>
-              <h4>Due Date</h4>
+              <h4>{t('kanban.dueDate')}</h4>
               {isEditing ? (
                 <input
                   type="date"
@@ -264,7 +272,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                 />
               ) : (
                 <span className={styles.sideValue}>
-                  {task.due_date ? format(new Date(task.due_date), 'PPP') : 'No due date'}
+                  {task.due_date ? format(new Date(task.due_date), 'PPP') : t('project.stats.overdue')}
                 </span>
               )}
             </div>
@@ -272,7 +280,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             {canEdit && (
               <div className={styles.dangerZone}>
                 <button className={styles.deleteBtn} onClick={() => setIsDeleting(true)}>
-                  🗑️ Delete Task
+                  🗑️ {t('kanban.deleteTask')}
                 </button>
               </div>
             )}
@@ -282,18 +290,18 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
         {isDeleting && (
           <div className={styles.deleteOverlay}>
             <div className={styles.confirmDeleteBox}>
-              <h3>Delete Task?</h3>
-              <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+              <h3>{t('kanban.deleteConfirm')}</h3>
+              <p>{t('kanban.deleteWarning')}</p>
               <div className={styles.confirmDeleteActions}>
                 <button
                   className={styles.confirmDeleteBtn}
                   onClick={handleDelete}
                   disabled={deleteTask.isPending}
                 >
-                  {deleteTask.isPending ? 'Deleting...' : 'Confirm Delete'}
+                  {deleteTask.isPending ? t('kanban.deleting') : t('kanban.confirmDelete')}
                 </button>
                 <button className={styles.cancelDeleteBtn} onClick={() => setIsDeleting(false)}>
-                  Cancel
+                  {t('kanban.cancel')}
                 </button>
               </div>
             </div>

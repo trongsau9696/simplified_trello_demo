@@ -66,7 +66,7 @@ export function useReorderTasks(projectId: number) {
         if (!old) return old
         const newBoard = { ...old }
 
-        tasks.forEach(({ id, position }) => {
+        tasks.forEach(() => {
           // This is a simplified optimistic update that just triggers a refetch on settle
           // because multi-column reordering is complex to mirror here perfectly.
           // But for same column it works.

@@ -12,7 +12,7 @@ export function useProjectChannel(projectId: number): void {
   const qc = useQueryClient()
 
   useEffect(() => {
-    if (!projectId) return
+    if (!projectId || !echo) return
 
     const channel = echo.private(`project.${projectId}`)
 
@@ -62,7 +62,7 @@ export function useProjectChannel(projectId: number): void {
     })
 
     return () => {
-      echo.leaveChannel(`project.${projectId}`)
+      echo?.leaveChannel(`project.${projectId}`)
     }
   }, [projectId, qc])
 }

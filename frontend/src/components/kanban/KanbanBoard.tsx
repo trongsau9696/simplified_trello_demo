@@ -85,14 +85,14 @@ export function KanbanBoard({ projectId, canEdit, members, filters = {} }: Props
     if (['todo', 'in_progress', 'done'].includes(overId as string)) {
       newStatus = overId as TaskStatus
     } else {
-      newStatus = Object.entries(board).find(([, tasks]) =>
-        tasks.some(t => t.id === Number(overId))
+      newStatus = (Object.entries(board) as [TaskStatus, Task[]][]).find(([, tasks]) =>
+        tasks.some((t: Task) => t.id === Number(overId))
       )?.[0] as TaskStatus
     }
 
     // 2. Determine current status
-    const currentStatus = Object.entries(board).find(([, tasks]) =>
-      tasks.some(t => t.id === activeId)
+    const currentStatus = (Object.entries(board) as [TaskStatus, Task[]][]).find(([, tasks]) =>
+      tasks.some((t: Task) => t.id === activeId)
     )?.[0] as TaskStatus
 
     if (!newStatus || !currentStatus) return
