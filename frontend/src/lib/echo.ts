@@ -8,17 +8,21 @@ declare global {
   }
 }
 
-window.Pusher = Pusher
+const initializeEcho = () => {
+  if (typeof window === 'undefined') return null
 
-window.Echo = new Echo({
-  broadcaster: 'reverb',
-  key: import.meta.env.VITE_REVERB_APP_KEY ?? 'trello_key',
-  wsHost: import.meta.env.VITE_REVERB_HOST ?? 'localhost',
-  wsPort: Number(import.meta.env.VITE_REVERB_PORT ?? 8080),
-  wssPort: Number(import.meta.env.VITE_REVERB_PORT ?? 8080),
-  forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
-  enabledTransports: ['ws', 'wss'],
-  disableStats: true,
-})
+  window.Pusher = Pusher
+  
+  return new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY ?? 'trello_key',
+    wsHost: import.meta.env.VITE_REVERB_HOST ?? 'localhost',
+    wsPort: Number(import.meta.env.VITE_REVERB_PORT ?? 8080),
+    wssPort: Number(import.meta.env.VITE_REVERB_PORT ?? 8080),
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
+    enabledTransports: ['ws', 'wss'],
+    disableStats: true,
+  })
+}
 
-export const echo = window.Echo
+export const echo = initializeEcho()

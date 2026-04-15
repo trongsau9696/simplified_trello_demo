@@ -27,5 +27,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
+    server: {
+      deps: {
+        inline: ['@testing-library/jest-dom', 'laravel-echo', 'pusher-js'],
+      },
+    },
   },
 })
