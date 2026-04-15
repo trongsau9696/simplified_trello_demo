@@ -32,7 +32,7 @@ class ProjectRepository
         ])->find($id);
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function create(array $data, User $owner): Project
     {
         $data['owner_id'] = $owner->id;
@@ -46,7 +46,7 @@ class ProjectRepository
         return $project;
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function update(Project $project, array $data): Project
     {
         $project->update($data);

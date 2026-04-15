@@ -14,13 +14,13 @@ class ProjectService
     ) {
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function create(array $data, User $owner): Project
     {
         return $this->projectRepository->create($data, $owner);
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function update(Project $project, array $data): Project
     {
         return $this->projectRepository->update($project, $data);

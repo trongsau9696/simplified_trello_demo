@@ -17,7 +17,7 @@ class TaskService
     ) {
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function create(Project $project, array $data, User $creator): Task
     {
         if (isset($data['assignee_id'])) {
@@ -40,7 +40,7 @@ class TaskService
         return $task;
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param  array<string, mixed>  $data */
     public function update(Task $task, array $data): Task
     {
         $oldAssigneeId = $task->assignee_id;

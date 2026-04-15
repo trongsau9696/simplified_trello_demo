@@ -57,7 +57,9 @@ class Project extends Model
     {
         $member = $this->members()->where('user_id', $user->id)->first();
 
-        if (!$member) return null;
+        if (! $member) {
+            return null;
+        }
 
         /** @var object{role: string} $pivot */
         $pivot = $member->pivot;

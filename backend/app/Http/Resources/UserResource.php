@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin \App\Models\User
+ *
  * @property object{role: string} $pivot
  */
 class UserResource extends JsonResource
