@@ -24,7 +24,6 @@ class TaskResource extends JsonResource
             'position' => $this->position,
             'due_date' => $this->due_date?->toDateString(),
             'is_overdue' => $this->isOverdue(),
-            'assignee_id' => $this->assignee_id,
             'assignee' => new UserResource($this->whenLoaded('assignee')),
             'project' => new ProjectResource($this->whenLoaded('project')),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),

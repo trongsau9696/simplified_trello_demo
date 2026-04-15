@@ -14,11 +14,13 @@ class ProjectService
     ) {
     }
 
+    /** @param array<string, mixed> $data */
     public function create(array $data, User $owner): Project
     {
         return $this->projectRepository->create($data, $owner);
     }
 
+    /** @param array<string, mixed> $data */
     public function update(Project $project, array $data): Project
     {
         return $this->projectRepository->update($project, $data);
@@ -51,7 +53,7 @@ class ProjectService
 
         $total = $tasks->count();
         $done = $tasks->where('status', 'done')->count();
-        $overdue = $tasks->filter(fn (mixed $t) => method_exists($t, 'isOverdue') && $t->isOverdue())->count();
+        $overdue = $tasks->filter(fn (\App\Models\Task $t) => $t->isOverdue())->count();
         $inProgress = $tasks->where('status', 'in_progress')->count();
 
         return [

@@ -9,12 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int|null $tasks_count
+ * @property int|null $done_tasks_count
+ * @property object{role: string} $pivot
+ * @use HasFactory<\Database\Factories\ProjectFactory>
+ */
 class Project extends Model
 {
+    /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory, SoftDeletes;
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -50,7 +57,12 @@ class Project extends Model
     {
         $member = $this->members()->where('user_id', $user->id)->first();
 
-        return $member?->pivot->role;
+        if (!$member) return null;
+
+        /** @var object{role: string} $pivot */
+        $pivot = $member->pivot;
+
+        return $pivot->role;
     }
 
     public function isOwner(User $user): bool

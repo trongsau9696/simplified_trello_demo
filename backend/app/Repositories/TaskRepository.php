@@ -68,6 +68,7 @@ class TaskRepository
         ])->find($id);
     }
 
+    /** @param array<string, mixed> $data */
     public function create(Project $project, array $data): Task
     {
         $data['project_id'] = $project->id;
@@ -78,6 +79,7 @@ class TaskRepository
         return Task::create($data);
     }
 
+    /** @param array<string, mixed> $data */
     public function update(Task $task, array $data): Task
     {
         $task->update($data);

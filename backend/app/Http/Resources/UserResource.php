@@ -7,17 +7,21 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin \App\Models\User
+ * @property object{role: string} $pivot
  */
 class UserResource extends JsonResource
 {
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
+        /** @var object{role: string} $pivot */
+        $pivot = $this->pivot;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->whenPivotLoaded('project_user', fn () => $this->pivot->role),
+            'role' => $this->whenPivotLoaded('project_user', fn () => $pivot->role),
         ];
     }
 }

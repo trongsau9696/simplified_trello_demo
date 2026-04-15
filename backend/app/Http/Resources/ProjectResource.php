@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin \App\Models\Project
+ * @property int|null $done_tasks_count
  */
 class ProjectResource extends JsonResource
 {

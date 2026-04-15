@@ -17,9 +17,10 @@ class TaskService
     ) {
     }
 
+    /** @param array<string, mixed> $data */
     public function create(Project $project, array $data, User $creator): Task
     {
-        if (isset($data['assignee_id']) && $data['assignee_id'] !== null) {
+        if (isset($data['assignee_id'])) {
             $this->ensureAssigneeIsMember($project, (int) $data['assignee_id']);
         }
 
@@ -39,6 +40,7 @@ class TaskService
         return $task;
     }
 
+    /** @param array<string, mixed> $data */
     public function update(Task $task, array $data): Task
     {
         $oldAssigneeId = $task->assignee_id;
@@ -46,7 +48,6 @@ class TaskService
 
         if (
             isset($data['assignee_id'])
-            && $data['assignee_id'] !== null
             && $data['assignee_id'] !== $oldAssigneeId
         ) {
             $this->ensureAssigneeIsMember($task->project, (int) $data['assignee_id']);
@@ -58,7 +59,6 @@ class TaskService
         if (
             isset($data['assignee_id'])
             && $data['assignee_id'] !== $oldAssigneeId
-            && $data['assignee_id'] !== null
         ) {
             /** @var User $assignee */
             $assignee = User::find($data['assignee_id']);
