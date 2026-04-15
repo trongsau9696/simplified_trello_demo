@@ -71,7 +71,7 @@ jobs:
 
       - name: PHPUnit Tests
         working-directory: backend
-        run: php artisan test --parallel
+        run: php artisan test
 
   # ─── Frontend ───────────────────────────────────────────────
   frontend:
