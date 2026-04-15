@@ -2,14 +2,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useInviteMember } from '@/hooks/useProject'
+import { useTranslation } from 'react-i18next'
 import styles from './EditProjectModal.module.css' // Reuse modal styles
-
-const schema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  role: z.enum(['editor', 'viewer']),
-})
-
-type FormData = z.infer<typeof schema>
 
 interface Props {
   projectId: number
@@ -17,7 +11,15 @@ interface Props {
 }
 
 export function InviteMemberModal({ projectId, onClose }: Props) {
+  const { t } = useTranslation()
   const inviteMember = useInviteMember(projectId)
+
+  const schema = z.object({
+    email: z.string().email(t('auth.errors.invalidEmail')),
+    role: z.enum(['editor', 'viewer']),
+  })
+
+  type FormData = z.infer<typeof schema>
 
   const {
     register,
@@ -40,7 +42,7 @@ export function InviteMemberModal({ projectId, onClose }: Props) {
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
-          <h2>Invite Member</h2>
+          <h2>{t('modals.inviteTitle')}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
             ×
           </button>
@@ -48,7 +50,7 @@ export function InviteMemberModal({ projectId, onClose }: Props) {
 
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.field}>
-            <label>User Email</label>
+            <label>{t('modals.userEmail')}</label>
             <input
               {...register('email')}
               placeholder="e.g. collegue@example.com"
@@ -59,20 +61,24 @@ export function InviteMemberModal({ projectId, onClose }: Props) {
           </div>
 
           <div className={styles.field}>
-            <label>Role</label>
+            <label>{t('modals.role')}</label>
             <select {...register('role')} className={styles.select}>
-              <option value="editor">Editor (Can manage tasks)</option>
-              <option value="viewer">Viewer (Can only view)</option>
+              <option value="editor">
+                {t('modals.editor')} ({t('modals.editorDesc')})
+              </option>
+              <option value="viewer">
+                {t('modals.viewer')} ({t('modals.viewerDesc')})
+              </option>
             </select>
             {errors.role && <span className={styles.error}>{errors.role.message}</span>}
           </div>
 
           <div className={styles.actions}>
             <button type="button" onClick={onClose} className={styles.cancelBtn}>
-              Cancel
+              {t('kanban.cancel')}
             </button>
             <button type="submit" disabled={inviteMember.isPending} className={styles.saveBtn}>
-              {inviteMember.isPending ? 'Sending Invite...' : 'Send Invitation'}
+              {inviteMember.isPending ? t('modals.sending') : t('modals.sendInvite')}
             </button>
           </div>
         </form>

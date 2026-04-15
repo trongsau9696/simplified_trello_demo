@@ -2,15 +2,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useUpdateProject } from '@/hooks/useProject'
+import { useTranslation } from 'react-i18next'
 import type { Project } from '@/types'
 import styles from './EditProjectModal.module.css'
-
-const schema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters').max(50),
-  description: z.string().max(500).optional().or(z.literal('')),
-})
-
-type FormData = z.infer<typeof schema>
 
 interface Props {
   project: Project
@@ -18,7 +12,15 @@ interface Props {
 }
 
 export function EditProjectModal({ project, onClose }: Props) {
+  const { t } = useTranslation()
   const updateProject = useUpdateProject(project.id)
+
+  const schema = z.object({
+    name: z.string().min(3, t('auth.errors.required')).max(50),
+    description: z.string().max(500).optional().or(z.literal('')),
+  })
+
+  type FormData = z.infer<typeof schema>
 
   const {
     register,
@@ -42,7 +44,7 @@ export function EditProjectModal({ project, onClose }: Props) {
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
-          <h2>Edit Project Settings</h2>
+          <h2>{t('modals.editProjectTitle')}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
             ×
           </button>
@@ -50,7 +52,7 @@ export function EditProjectModal({ project, onClose }: Props) {
 
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.field}>
-            <label>Project Name</label>
+            <label>{t('modals.projectName')}</label>
             <input
               {...register('name')}
               placeholder="Enter project name"
@@ -61,7 +63,7 @@ export function EditProjectModal({ project, onClose }: Props) {
           </div>
 
           <div className={styles.field}>
-            <label>Description (Optional)</label>
+            <label>{t('modals.projectDescription')}</label>
             <textarea
               {...register('description')}
               placeholder="What is this project about?"
@@ -74,10 +76,10 @@ export function EditProjectModal({ project, onClose }: Props) {
 
           <div className={styles.actions}>
             <button type="button" onClick={onClose} className={styles.cancelBtn}>
-              Cancel
+              {t('kanban.cancel')}
             </button>
             <button type="submit" disabled={updateProject.isPending} className={styles.saveBtn}>
-              {updateProject.isPending ? 'Saving...' : 'Save Changes'}
+              {updateProject.isPending ? t('kanban.saving') : t('kanban.save')}
             </button>
           </div>
         </form>

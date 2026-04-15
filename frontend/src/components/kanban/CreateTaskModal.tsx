@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCreateTask } from '@/hooks/useTasks'
 import { useProject } from '@/hooks/useProject'
+import { useTranslation } from 'react-i18next'
 import type { TaskStatus, TaskPriority } from '@/types'
 import styles from './TaskModal.module.css' // Reusing the same beautiful modal CSS
 
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
+  const { t } = useTranslation()
   const createTask = useCreateTask(projectId)
   const { data: project } = useProject(projectId)
 
@@ -43,6 +45,12 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
 
   const members = project?.members || []
 
+  const statusLabels: Record<TaskStatus, string> = {
+    todo: t('kanban.todo'),
+    in_progress: t('kanban.inProgress'),
+    done: t('kanban.done'),
+  }
+
   return (
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
@@ -57,21 +65,21 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
                 htmlFor="task-title"
                 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 600 }}
               >
-                Task Title *
+                {t('kanban.title')} *
               </label>
               <input
                 id="task-title"
                 className={styles.titleInput}
                 value={title}
                 onChange={e => setTitle(e.target.value)}
-                placeholder="Enter task title..."
+                placeholder={t('kanban.searchPlaceholder')}
                 autoFocus
                 required
               />
             </div>
             <div className={styles.meta}>
               <span className={styles.statusBadge}>
-                Creating in: {initialStatus.replace('_', ' ').toUpperCase()}
+                {t('kanban.creatingIn')} {statusLabels[initialStatus]}
               </span>
             </div>
           </div>
@@ -80,7 +88,7 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
             <div className={styles.mainCol}>
               <div className={styles.section}>
                 <div className={styles.sectionHeader}>
-                  <h3>Description</h3>
+                  <h3>{t('kanban.description')}</h3>
                 </div>
                 <textarea
                   className={styles.descInput}
@@ -100,10 +108,10 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
                     className={styles.btnPrimary}
                     disabled={!title.trim() || createTask.isPending}
                   >
-                    {createTask.isPending ? 'Creating...' : 'Create Task'}
+                    {createTask.isPending ? t('kanban.saving') : t('kanban.addTask')}
                   </button>
                   <button type="button" className={styles.btnSecondary} onClick={onClose}>
-                    Cancel
+                    {t('kanban.cancel')}
                   </button>
                 </div>
               </div>
@@ -111,13 +119,13 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
 
             <div className={styles.sidebar}>
               <div className={styles.widget}>
-                <h4>Assignee</h4>
+                <h4>{t('kanban.assignee')}</h4>
                 <select
                   value={assigneeId}
                   onChange={e => setAssigneeId(e.target.value === '' ? '' : Number(e.target.value))}
                   className={styles.select}
                 >
-                  <option value="">Unassigned</option>
+                  <option value="">{t('kanban.unassigned')}</option>
                   {members.map(member => (
                     <option key={member.id} value={member.id}>
                       {member.name}
@@ -127,20 +135,20 @@ export function CreateTaskModal({ projectId, initialStatus, onClose }: Props) {
               </div>
 
               <div className={styles.widget}>
-                <h4>Priority</h4>
+                <h4>{t('kanban.priority')}</h4>
                 <select
                   value={priority}
                   onChange={e => setPriority(e.target.value as TaskPriority)}
                   className={styles.select}
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="low">{t('kanban.low')}</option>
+                  <option value="medium">{t('kanban.medium')}</option>
+                  <option value="high">{t('kanban.high')}</option>
                 </select>
               </div>
 
               <div className={styles.widget}>
-                <h4>Due Date</h4>
+                <h4>{t('kanban.dueDate')}</h4>
                 <input
                   type="date"
                   value={dueDate}

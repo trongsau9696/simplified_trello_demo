@@ -22,7 +22,7 @@
       "done": "Done"
     },
     "chart": {
-      "title": "All Projects Progress"
+      "title": "All Tasks Progress"
     }
   },
   "nav": {
@@ -55,6 +55,68 @@
     "medium": "Medium",
     "high": "High",
     "allMembers": "All Members",
-    "clearFilters": "Clear"
+    "allStatuses": "All Statuses",
+    "dueDate": "Due Date",
+    "clearFilters": "Clear",
+    "editTask": "Edit Task",
+    "deleteTask": "Delete Task",
+    "addTask": "Add Task",
+    "title": "Title",
+    "description": "Description",
+    "assignee": "Assignee",
+    "priority": "Priority",
+    "dueDate": "Due Date",
+    "activity": "Activity",
+    "unassigned": "Unassigned",
+    "noDescription": "No description provided.",
+    "writeComment": "Write a comment...",
+    "send": "Send",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "deleteConfirm": "Delete Task?",
+    "deleteWarning": "Are you sure you want to delete this task? This action cannot be undone.",
+    "confirmDelete": "Confirm Delete",
+    "saving": "Saving...",
+    "deleting": "Deleting...",
+    "loading": "Loading task details...",
+    "creatingIn": "Creating in:"
+  },
+  "auth": {
+    "welcome": "Welcome back",
+    "signInSubtitle": "Sign in to your workspace",
+    "registerTitle": "Create account",
+    "registerSubtitle": "Join our workspace",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordMismatch": "Passwords do not match",
+    "name": "Full Name",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "creating": "Creating account...",
+    "register": "Register",
+    "noAccount": "No account?",
+    "hasAccount": "Already have an account?",
+    "errors": {
+      "invalidEmail": "Invalid email",
+      "minPassword": "Min 8 characters",
+      "required": "This field is required"
+    }
+  },
+  "modals": {
+    "inviteTitle": "Invite Member",
+    "inviteBtn": "Invite Member",
+    "editProjectTitle": "Edit Project Details",
+    "projectName": "Project Name",
+    "projectDescription": "Description",
+    "inviting": "Inviting...",
+    "userEmail": "User Email",
+    "role": "Role",
+    "editor": "Editor",
+    "editorDesc": "Can manage tasks",
+    "viewer": "Viewer",
+    "viewerDesc": "Can only view",
+    "sendInvite": "Send Invitation",
+    "sending": "Sending Invite..."
   }
 }

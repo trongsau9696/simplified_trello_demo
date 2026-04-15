@@ -22,7 +22,7 @@
       "done": "Hoàn Thành"
     },
     "chart": {
-      "title": "Tiến Độ Các Dự Án"
+      "title": "Tiến Độ Nhiệm Vụ"
     }
   },
   "nav": {
@@ -55,6 +55,68 @@
     "medium": "Trung bình",
     "high": "Cao",
     "allMembers": "Tất cả thành viên",
-    "clearFilters": "Xóa Lọc"
+    "allStatuses": "Tất cả trạng thái",
+    "dueDate": "Hạn chót",
+    "clearFilters": "Xóa Lọc",
+    "editTask": "Chỉnh sửa công việc",
+    "deleteTask": "Xóa công việc",
+    "addTask": "Thêm công việc",
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "assignee": "Người phụ trách",
+    "priority": "Độ ưu tiên",
+    "dueDate": "Hạn chót",
+    "activity": "Hoạt động",
+    "unassigned": "Chưa giao",
+    "noDescription": "Chưa có mô tả.",
+    "writeComment": "Viết bình luận...",
+    "send": "Gửi",
+    "save": "Lưu thay đổi",
+    "cancel": "Hủy",
+    "deleteConfirm": "Xóa công việc?",
+    "deleteWarning": "Bạn có chắc chắn muốn xóa công việc này? Hành động này không thể hoàn tác.",
+    "confirmDelete": "Xác nhận xóa",
+    "saving": "Đang lưu...",
+    "deleting": "Đang xóa...",
+    "loading": "Đang tải chi tiết công việc...",
+    "creatingIn": "Tạo trong:"
+  },
+  "auth": {
+    "welcome": "Chào mừng trở lại",
+    "signInSubtitle": "Đăng nhập vào không gian làm việc của bạn",
+    "registerTitle": "Tạo tài khoản",
+    "registerSubtitle": "Tham gia không gian làm việc của chúng tôi",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "name": "Họ và Tên",
+    "signingIn": "Đang đăng nhập...",
+    "signIn": "Đăng nhập",
+    "creating": "Đang tạo tài khoản...",
+    "register": "Đăng ký",
+    "noAccount": "Chưa có tài khoản?",
+    "hasAccount": "Đã có tài khoản?",
+    "errors": {
+      "invalidEmail": "Email không hợp lệ",
+      "minPassword": "Tối thiểu 8 ký tự",
+      "required": "Trường này là bắt buộc"
+    }
+  },
+  "modals": {
+    "inviteTitle": "Mời thành viên",
+    "inviteBtn": "Mời thành viên",
+    "editProjectTitle": "Chỉnh sửa dự án",
+    "projectName": "Tên dự án",
+    "projectDescription": "Mô tả",
+    "inviting": "Đang mời...",
+    "userEmail": "Email của người dùng",
+    "role": "Vai trò",
+    "editor": "Biên tập viên",
+    "editorDesc": "Có thể quản lý nhiệm vụ",
+    "viewer": "Người xem",
+    "viewerDesc": "Chỉ có thể xem",
+    "sendInvite": "Gửi lời mời",
+    "sending": "Đang gửi lời mời..."
   }
 }
