@@ -50,7 +50,7 @@
 git clone https://github.com/trongsau9696/simplified_trello_demo.git
 cd simplified_trello_demo
 
-# Start all services (PHP 8.3, Nginx, MySQL 8, Redis 7.2, Node 18)
+# Start all services (PHP 8.3, Nginx, MySQL 8, Redis 7.2, Node 22)
 docker compose up -d
 
 # Wait ~30s for MySQL to initialize, then:
