@@ -19,6 +19,9 @@ export interface Project {
   owner: User
   members?: User[]
   tasks_count?: number
+  done_tasks_count?: number
+  in_progress_tasks_count?: number
+  todo_tasks_count?: number
   my_role?: 'owner' | 'editor' | 'viewer'
   created_at: string
   updated_at: string

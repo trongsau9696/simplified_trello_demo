@@ -19,6 +19,8 @@ class ProjectRepository
             ->withCount([
                 'tasks',
                 'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done'),
+                'tasks as in_progress_tasks_count' => fn ($q) => $q->where('status', 'in_progress'),
+                'tasks as todo_tasks_count' => fn ($q) => $q->where('status', 'todo'),
             ])
             ->latest()
             ->cursorPaginate($perPage);

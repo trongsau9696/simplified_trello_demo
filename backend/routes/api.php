@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('tasks/{task}', [TaskController::class, 'show']);
     Route::put('tasks/{task}', [TaskController::class, 'update']);
     Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus']);
+    Route::put('projects/{project}/tasks/reorder', [TaskController::class, 'reorder']);
     Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
 
     // Comments

@@ -84,4 +84,14 @@ class TaskService
             throw new \InvalidArgumentException('The assignee must be a member of the project.');
         }
     }
+
+    /** @param array<int, int> $taskPositions [id => position] */
+    public function reorderTasks(Project $project, array $taskPositions): void
+    {
+        foreach ($taskPositions as $id => $position) {
+            Task::where('id', $id)
+                ->where('project_id', $project->id)
+                ->update(['position' => $position]);
+        }
+    }
 }

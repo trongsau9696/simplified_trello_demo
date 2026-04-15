@@ -4,16 +4,28 @@ import { useAuthStore } from '@/store/authStore'
 import { useAuth } from '@/hooks/useAuth'
 import { SkeletonCard } from '@/components/ui/SkeletonLoader'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { ProjectProgress } from '@/components/project/ProjectProgress'
+import { TaskStatusChart } from '@/components/dashboard/TaskStatusChart'
+import { useTranslation } from 'react-i18next'
 import styles from './DashboardPage.module.css'
 
 export default function DashboardPage() {
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
   const { data, isLoading } = useProjects()
   const { logout } = useAuth()
 
   const projects = data?.data ?? []
-  const totalTasks = projects.reduce((a, p) => a + (p.tasks_count ?? 0), 0)
+  
+  // Aggregate stats for chart
+  const stats = projects.reduce((acc, p) => ({
+    todo: acc.todo + (p.todo_tasks_count || 0),
+    in_progress: acc.in_progress + (p.in_progress_tasks_count || 0),
+    done: acc.done + (p.done_tasks_count || 0)
+  }), { todo: 0, in_progress: 0, done: 0 })
+
+  const totalTasks = stats.todo + stats.in_progress + stats.done
 
   return (
     <div className={styles.layout}>
@@ -25,20 +37,23 @@ export default function DashboardPage() {
 
         <nav className={styles.nav}>
           <div className={styles.navGroup}>
-            <label>Menu</label>
+            <label>{t('nav.menu')}</label>
             <Link to="/dashboard" className={styles.navItem} aria-current="page">
-              <span className={styles.navIcon}>📊</span> Dashboard
+              <span className={styles.navIcon}>📊</span> {t('nav.dashboard')}
             </Link>
             <Link to="/projects" className={styles.navItem}>
-              <span className={styles.navIcon}>📁</span> Projects
+              <span className={styles.navIcon}>📁</span> {t('nav.projects')}
             </Link>
           </div>
 
           <div className={styles.navGroup}>
-            <label>Settings</label>
+            <label>{t('nav.settings')}</label>
             <div className={styles.navItemInner}>
-              <span className={styles.navIcon}>🌓</span> Appearance
-              <ThemeToggle />
+              <span className={styles.navIcon}>🌓</span> {t('nav.appearance')}
+              <div style={{display: 'flex', gap: '0.5rem'}}>
+                 <LanguageSwitcher />
+                 <ThemeToggle />
+              </div>
             </div>
           </div>
         </nav>
@@ -52,7 +67,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <button onClick={() => logout()} className={styles.logoutBtn}>
-            <span>🚪</span> Sign out
+            <span>🚪</span> {t('nav.signOut')}
           </button>
         </div>
       </aside>
@@ -60,25 +75,25 @@ export default function DashboardPage() {
       <main className={styles.main}>
         <header className={styles.hero}>
           <div className={styles.heroContent}>
-            <h1>Welcome back, {(user?.name || 'User').split(' ')[0]}! 👋</h1>
+            <h1>{t('dashboard.welcome', { name: (user?.name || 'User').split(' ')[0] })} 👏</h1>
             <p>
-              You have {projects.length} active projects and {totalTasks} tasks to manage today.
+              {t('dashboard.summary', { projects: projects.length, tasks: totalTasks })}
             </p>
             <div className={styles.heroActions}>
               <Link to="/projects" className={styles.primaryBtn}>
-                Manage Projects
+                {t('dashboard.manageProjects')}
               </Link>
             </div>
           </div>
           <div className={styles.heroStats}>
             <div className={styles.miniStat}>
               <span className={styles.miniVal}>{projects.length}</span>
-              <span className={styles.miniLbl}>Projects</span>
+              <span className={styles.miniLbl}>{t('dashboard.stats.projects')}</span>
             </div>
             <div className={styles.miniStatDivider} />
             <div className={styles.miniStat}>
               <span className={styles.miniVal}>{totalTasks}</span>
-              <span className={styles.miniLbl}>Tasks</span>
+              <span className={styles.miniLbl}>{t('dashboard.stats.tasks')}</span>
             </div>
           </div>
         </header>
@@ -86,12 +101,32 @@ export default function DashboardPage() {
         <section className={styles.contentSection}>
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitle}>
-              <h2>Active Projects</h2>
-              <p>Your most recent workspace activity</p>
+              <h2>{t('dashboard.activeProjects')}</h2>
+              <p>{t('dashboard.recentActivity')}</p>
             </div>
             <Link to="/projects" className={styles.viewAll}>
-              View all projects →
+              {t('dashboard.viewAll')}
             </Link>
+          </div>
+
+          <div className={styles.dashboardGrid}>
+             <TaskStatusChart data={stats} />
+             
+             <div className={styles.welcomeStats}>
+                <h3>{t('dashboard.summaryWidget.title')}</h3>
+                <div className={styles.summaryItem}>
+                   <span className={styles.summaryDot} style={{ background: '#6366f1' }}/>
+                   <span>{t('dashboard.summaryWidget.todo')}: {stats.todo}</span>
+                </div>
+                <div className={styles.summaryItem}>
+                   <span className={styles.summaryDot} style={{ background: '#f59e0b' }}/>
+                   <span>{t('dashboard.summaryWidget.inProgress')}: {stats.in_progress}</span>
+                </div>
+                <div className={styles.summaryItem}>
+                   <span className={styles.summaryDot} style={{ background: '#10b981' }}/>
+                   <span>{t('dashboard.summaryWidget.done')}: {stats.done}</span>
+                </div>
+             </div>
           </div>
 
           {isLoading ? (
@@ -114,7 +149,7 @@ export default function DashboardPage() {
               {projects.slice(0, 6).map(p => (
                 <Link key={p.id} to={`/projects/${p.id}`} className={styles.projectCard}>
                   <div className={styles.cardHeader}>
-                    <span className={`${styles.roleBadge} ${styles[p.my_role]}`}>{p.my_role}</span>
+                    <span className={`${styles.roleBadge} ${styles[p.my_role || 'viewer']}`}>{p.my_role || 'viewer'}</span>
                     <span className={styles.taskCount}>{p.tasks_count} tasks</span>
                   </div>
                   <h3>{p.name}</h3>

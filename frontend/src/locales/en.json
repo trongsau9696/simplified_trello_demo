@@ -1,0 +1,60 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}!",
+    "summary": "You have {{projects}} active projects and {{tasks}} tasks to manage today.",
+    "manageProjects": "Manage Projects",
+    "activeProjects": "Active Projects",
+    "recentActivity": "Your most recent workspace activity",
+    "viewAll": "View all projects →",
+    "noProjects": "No projects yet",
+    "startJourney": "Start your journey by creating your first workspace.",
+    "createProject": "Create Project",
+    "tasks": "tasks",
+    "stats": {
+      "projects": "Projects",
+      "tasks": "Tasks"
+    },
+    "summaryWidget": {
+      "title": "Summary",
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "done": "Done"
+    },
+    "chart": {
+      "title": "All Projects Progress"
+    }
+  },
+  "nav": {
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "signOut": "Sign out"
+  },
+  "project": {
+    "back": "Back",
+    "invite": "Invite",
+    "exportPdf": "Export PDF",
+    "stats": {
+      "total": "Total",
+      "todo": "Todo",
+      "inProgress": "In Progress",
+      "done": "Done",
+      "overdue": "Overdue"
+    }
+  },
+  "kanban": {
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "searchPlaceholder": "Search tasks...",
+    "allPriorities": "All Priorities",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "allMembers": "All Members",
+    "clearFilters": "Clear"
+  }
+}

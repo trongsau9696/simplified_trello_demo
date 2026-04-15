@@ -42,15 +42,30 @@ class TaskRepository
         return $query->cursorPaginate($perPage);
     }
 
-    /** @return array<string, Task[]> Grouped by status for Kanban */
-    public function groupedByStatus(Project $project): array
+    /** 
+     * @param array<string, mixed> $filters
+     * @return array<string, Task[]> Grouped by status for Kanban 
+     */
+    public function groupedByStatus(Project $project, array $filters = []): array
     {
-        $tasks = Task::query()
+        $query = Task::query()
             ->where('project_id', $project->id)
             ->with(['assignee:id,name,email'])
-            ->withCount('comments')
-            ->orderBy('position')
-            ->get();
+            ->withCount('comments');
+
+        if (isset($filters['search'])) {
+            $query->where('title', 'like', '%' . $filters['search'] . '%');
+        }
+
+        if (isset($filters['priority'])) {
+            $query->where('priority', $filters['priority']);
+        }
+
+        if (isset($filters['assignee_id'])) {
+            $query->where('assignee_id', (int) $filters['assignee_id']);
+        }
+
+        $tasks = $query->orderBy('position')->get();
 
         return [
             'todo' => $tasks->where('status', 'todo')->values()->all(),

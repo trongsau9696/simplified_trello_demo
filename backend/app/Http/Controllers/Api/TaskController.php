@@ -33,11 +33,12 @@ class TaskController extends Controller
         return TaskResource::collection($tasks);
     }
 
-    public function kanban(Project $project): JsonResponse
+    public function kanban(Request $request, Project $project): JsonResponse
     {
         $this->authorize('view', $project);
 
-        $grouped = $this->taskRepository->groupedByStatus($project);
+        $filters = $request->only(['search', 'priority', 'assignee_id']);
+        $grouped = $this->taskRepository->groupedByStatus($project, $filters);
 
         return response()->json([
             'data' => [
@@ -92,6 +93,26 @@ class TaskController extends Controller
         Cache::forget("project:{$task->project_id}:stats");
 
         return new TaskResource($updated);
+    }
+
+    public function reorder(Request $request, Project $project): JsonResponse
+    {
+        $this->authorize('update', $project);
+
+        $request->validate([
+            'tasks' => ['required', 'array'],
+            'tasks.*.id' => ['required', 'exists:tasks,id'],
+            'tasks.*.position' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $taskPositions = [];
+        foreach ($request->tasks as $t) {
+            $taskPositions[$t['id']] = $t['position'];
+        }
+
+        $this->taskService->reorderTasks($project, $taskPositions);
+
+        return response()->json(['message' => 'Tasks reordered']);
     }
 
     public function destroy(Task $task): JsonResponse

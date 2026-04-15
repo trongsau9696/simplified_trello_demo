@@ -10,10 +10,11 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core'
 import { useKanban } from '@/hooks/useProject'
-import { useUpdateTaskStatus } from '@/hooks/useTasks'
+import { useUpdateTaskStatus, useReorderTasks } from '@/hooks/useTasks'
 import { useProjectChannel } from '@/hooks/useProjectChannel'
 import { useAuthStore } from '@/store/authStore'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import type { Task, TaskStatus, User } from '@/types'
 import { KanbanColumn } from './KanbanColumn'
 import { TaskCard } from './TaskCard'
@@ -31,11 +32,14 @@ interface Props {
   projectId: number
   canEdit: boolean
   members: User[]
+  filters?: Record<string, string>
 }
 
-export function KanbanBoard({ projectId, canEdit, members }: Props) {
+export function KanbanBoard({ projectId, canEdit, members, filters = {} }: Props) {
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
-  const { data: board, isLoading } = useKanban(projectId)
+  const { data: board, isLoading } = useKanban(projectId, filters)
+  const reorderTasks = useReorderTasks(projectId)
   const updateStatus = useUpdateTaskStatus(projectId)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null)
@@ -73,36 +77,50 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
 
     if (!over || !board) return
 
-    const taskId = Number(active.id)
-    const allTasks = Object.values(board).flat()
-    const task = allTasks.find(t => t.id === taskId)
+    const activeId = Number(active.id)
+    const overId = over.id
+    
+    // 1. Determine target status
+    let newStatus: TaskStatus
+    if (['todo', 'in_progress', 'done'].includes(overId as string)) {
+      newStatus = overId as TaskStatus
+    } else {
+      newStatus = Object.entries(board).find(([, tasks]) =>
+        tasks.some(t => t.id === Number(overId))
+      )?.[0] as TaskStatus
+    }
+
+    // 2. Determine current status
+    const currentStatus = Object.entries(board).find(([, tasks]) =>
+      tasks.some(t => t.id === activeId)
+    )?.[0] as TaskStatus
+
+    if (!newStatus || !currentStatus) return
+
+    const task = board[currentStatus].find(t => t.id === activeId)
     if (!task) return
 
     const canMove = canEdit || task.assignee_id === user?.id
     if (!canMove) return
 
-    let newStatus = over.id as string
+    // 3. Handle same column reordering
+    if (newStatus === currentStatus) {
+      if (activeId !== Number(overId)) {
+        const oldIndex = board[currentStatus].findIndex(t => t.id === activeId)
+        const newIndex = board[currentStatus].findIndex(t => t.id === Number(overId))
+        
+        const newTasks = [...board[currentStatus]]
+        const [movedTask] = newTasks.splice(oldIndex, 1)
+        newTasks.splice(newIndex, 0, movedTask)
 
-    if (!['todo', 'in_progress', 'done'].includes(newStatus)) {
-      const targetTaskId = Number(over.id)
-      const foundStatus = Object.entries(board).find(([, tasks]) =>
-        tasks.some(t => t.id === targetTaskId)
-      )?.[0] as string | undefined
-
-      if (foundStatus) {
-        newStatus = foundStatus
-      } else {
-        return
+        const tasksToUpdate = newTasks.map((t, idx) => ({ id: t.id, position: idx + 1 }))
+        reorderTasks.mutate(tasksToUpdate)
       }
+      return
     }
 
-    const currentStatus = Object.entries(board).find(([, tasks]) =>
-      tasks.some(t => t.id === Number(active.id))
-    )?.[0] as TaskStatus | undefined
-
-    if (newStatus !== currentStatus) {
-      updateStatus.mutate({ id: taskId, status: newStatus as TaskStatus })
-    }
+    // 4. Handle cross-column move
+    updateStatus.mutate({ id: activeId, status: newStatus })
   }
 
   if (isLoading) return <div className={styles.loading}>Loading...</div>
@@ -118,10 +136,10 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
       >
         <div className={styles.board} role="main" aria-label="Kanban board">
           {COLUMNS.map(col => (
-            <KanbanColumn
+              <KanbanColumn
               key={col.id}
               id={col.id}
-              label={col.label}
+              label={t(`kanban.${col.id === 'in_progress' ? 'inProgress' : col.id}`)}
               color={col.color}
               tasks={board?.[col.id] ?? []}
               canEdit={canEdit}

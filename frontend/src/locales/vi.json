@@ -1,0 +1,60 @@
+{
+  "dashboard": {
+    "title": "Bảng Điều Khiển",
+    "welcome": "Chào mừng trở lại, {{name}}!",
+    "summary": "Bạn có {{projects}} dự án và {{tasks}} nhiệm vụ cần quản lý hôm nay.",
+    "manageProjects": "Quản lý Dự Án",
+    "activeProjects": "Dự Án Đang Hoạt Động",
+    "recentActivity": "Hoạt động gần đây của bạn",
+    "viewAll": "Xem tất cả dự án →",
+    "noProjects": "Chưa có dự án nào",
+    "startJourney": "Bắt đầu bằng cách tạo không gian làm việc đầu tiên của bạn.",
+    "createProject": "Tạo Dự Án",
+    "tasks": "nhiệm vụ",
+    "stats": {
+      "projects": "Dự Án",
+      "tasks": "Nhiệm vụ"
+    },
+    "summaryWidget": {
+      "title": "Tổng Quan",
+      "todo": "Cần Làm",
+      "inProgress": "Đang Làm",
+      "done": "Hoàn Thành"
+    },
+    "chart": {
+      "title": "Tiến Độ Các Dự Án"
+    }
+  },
+  "nav": {
+    "menu": "Bảng Chọn",
+    "dashboard": "Bảng Điều Khiển",
+    "projects": "Dự Án",
+    "settings": "Cài Đặt",
+    "appearance": "Giao Diện",
+    "signOut": "Đăng Xuất"
+  },
+  "project": {
+    "back": "Quay Lại",
+    "invite": "Mời",
+    "exportPdf": "Xuất PDF",
+    "stats": {
+      "total": "Tổng",
+      "todo": "Cần Làm",
+      "inProgress": "Đang Làm",
+      "done": "Xong",
+      "overdue": "Quá Hạn"
+    }
+  },
+  "kanban": {
+    "todo": "Cần Làm",
+    "inProgress": "Đang Làm",
+    "done": "Hoàn Thành",
+    "searchPlaceholder": "Tìm kiếm nhiệm vụ...",
+    "allPriorities": "Tất cả độ ưu tiên",
+    "low": "Thấp",
+    "medium": "Trung bình",
+    "high": "Cao",
+    "allMembers": "Tất cả thành viên",
+    "clearFilters": "Xóa Lọc"
+  }
+}

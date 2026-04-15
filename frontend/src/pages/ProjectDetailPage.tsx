@@ -7,6 +7,8 @@ import { SkeletonPage } from '@/components/ui/SkeletonLoader'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { EditProjectModal } from '@/components/project/EditProjectModal'
 import { InviteMemberModal } from '@/components/project/InviteMemberModal'
+import { TaskFilterBar } from '@/components/kanban/TaskFilterBar'
+import { useTranslation } from 'react-i18next'
 import type { User } from '@/types'
 import styles from './ProjectDetailPage.module.css'
 
@@ -45,6 +47,7 @@ function MemberList({
 
 function ExportPdfButton({ projectId }: { projectId: number }) {
   const token = useAuthStore(s => s.token)
+  const { t } = useTranslation()
 
   const handleExport = async () => {
     const res = await fetch(`/api/projects/${projectId}/report/pdf`, {
@@ -65,16 +68,22 @@ function ExportPdfButton({ projectId }: { projectId: number }) {
       onClick={handleExport}
       aria-label="Export project report as PDF"
     >
-      📄 Export PDF
+      📄 {t('project.exportPdf')}
     </button>
   )
 }
 
 export default function ProjectDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const projectId = Number(id)
   const [isEditingProject, setIsEditingProject] = useState(false)
   const [isInvitingMember, setIsInvitingMember] = useState(false)
+  
+  // Filters
+  const [search, setSearch] = useState('')
+  const [priority, setPriority] = useState('')
+  const [assigneeId, setAssigneeId] = useState('')
 
   const { data: project, isLoading } = useProject(projectId)
   const { data: stats } = useProjectStats(projectId)
@@ -91,7 +100,7 @@ export default function ProjectDetailPage() {
       <header className={styles.header}>
         <div className={styles.titleInfo}>
           <Link to="/dashboard" className={styles.back}>
-            ← Back
+            ← {t('project.back')}
           </Link>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{project.name}</h1>
@@ -112,7 +121,7 @@ export default function ProjectDetailPage() {
             />
             {isOwner && (
               <button className={styles.inviteBtn} onClick={() => setIsInvitingMember(true)}>
-                + Invite
+                + {t('project.invite')}
               </button>
             )}
           </div>
@@ -137,11 +146,11 @@ export default function ProjectDetailPage() {
       {stats && (
         <div className={styles.statsRow}>
           {[
-            { label: 'Total', value: stats.total, color: '#94a3b8' },
-            { label: 'Todo', value: stats.todo, color: '#6366f1' },
-            { label: 'In Progress', value: stats.in_progress, color: '#f59e0b' },
-            { label: 'Done', value: stats.done, color: '#10b981' },
-            { label: 'Overdue', value: stats.overdue, color: '#ef4444' },
+            { label: t('project.stats.total'), value: stats.total, color: '#94a3b8' },
+            { label: t('project.stats.todo'), value: stats.todo, color: '#6366f1' },
+            { label: t('project.stats.inProgress'), value: stats.in_progress, color: '#f59e0b' },
+            { label: t('project.stats.done'), value: stats.done, color: '#10b981' },
+            { label: t('project.stats.overdue'), value: stats.overdue, color: '#ef4444' },
           ].map(s => (
             <div key={s.label} className={styles.statPill} style={{ borderColor: s.color }}>
               <span className={styles.statVal} style={{ color: s.color }}>
@@ -153,7 +162,22 @@ export default function ProjectDetailPage() {
         </div>
       )}
 
-      <KanbanBoard projectId={projectId} canEdit={canEdit} members={project.members || []} />
+      <TaskFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        priority={priority}
+        onPriorityChange={setPriority}
+        assigneeId={assigneeId}
+        onAssigneeChange={setAssigneeId}
+        members={project.members || []}
+      />
+
+      <KanbanBoard 
+        projectId={projectId} 
+        canEdit={canEdit} 
+        members={project.members || []} 
+        filters={{ search, priority, assignee_id: assigneeId }}
+      />
     </div>
   )
 }

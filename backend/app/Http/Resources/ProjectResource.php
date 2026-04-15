@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @mixin \App\Models\Project
  *
  * @property int|null $done_tasks_count
+ * @property int|null $in_progress_tasks_count
+ * @property int|null $todo_tasks_count
  */
 class ProjectResource extends JsonResource
 {
@@ -23,6 +25,8 @@ class ProjectResource extends JsonResource
             'members' => UserResource::collection($this->whenLoaded('members')),
             'tasks_count' => $this->whenCounted('tasks'),
             'done_tasks_count' => $this->done_tasks_count,
+            'in_progress_tasks_count' => $this->in_progress_tasks_count,
+            'todo_tasks_count' => $this->todo_tasks_count,
             'my_role' => $this->when(
                 $request->user() !== null,
                 fn () => $this->getRoleForUser($request->user())

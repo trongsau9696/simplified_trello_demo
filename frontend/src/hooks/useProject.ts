@@ -37,10 +37,10 @@ export function useProjectStats(id: number) {
   })
 }
 
-export function useKanban(projectId: number) {
+export function useKanban(projectId: number, filters: Record<string, any> = {}) {
   return useQuery({
-    queryKey: ['projects', projectId, 'kanban'],
-    queryFn: () => projectApi.kanban(projectId),
+    queryKey: ['projects', projectId, 'kanban', filters],
+    queryFn: () => projectApi.kanban(projectId, filters),
     enabled: !!projectId,
   })
 }

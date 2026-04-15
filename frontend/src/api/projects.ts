@@ -42,8 +42,8 @@ export const projectApi = {
     return res.data.data
   },
 
-  kanban: async (id: number) => {
-    const res = await api.get<{ data: KanbanBoard }>(`/projects/${id}/tasks/kanban`)
+  kanban: async (id: number, params?: Record<string, any>) => {
+    const res = await api.get<{ data: KanbanBoard }>(`/projects/${id}/tasks/kanban`, { params })
     return res.data.data
   },
 }
@@ -76,6 +76,10 @@ export const taskApi = {
 
   delete: async (id: number) => {
     await api.delete(`/tasks/${id}`)
+  },
+  reorder: async (projectId: number, tasks: { id: number; position: number }[]) => {
+    const res = await api.put(`/projects/${projectId}/tasks/reorder`, { tasks })
+    return res.data
   },
 }
 
