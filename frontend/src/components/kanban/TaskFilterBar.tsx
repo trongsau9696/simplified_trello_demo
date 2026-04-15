@@ -9,6 +9,10 @@ interface Props {
   onPriorityChange: (val: string) => void
   assigneeId: string
   onAssigneeChange: (val: string) => void
+  status: string
+  onStatusChange: (val: string) => void
+  dueDate: string
+  onDueDateChange: (val: string) => void
   members: User[]
 }
 
@@ -19,6 +23,10 @@ export function TaskFilterBar({
   onPriorityChange,
   assigneeId,
   onAssigneeChange,
+  status,
+  onStatusChange,
+  dueDate,
+  onDueDateChange,
   members,
 }: Props) {
   const { t } = useTranslation()
@@ -37,6 +45,17 @@ export function TaskFilterBar({
       </div>
 
       <div className={styles.filters}>
+        <select
+          className={styles.select}
+          value={status}
+          onChange={e => onStatusChange(e.target.value)}
+        >
+          <option value="">{t('kanban.allStatuses')}</option>
+          <option value="todo">{t('kanban.todo')}</option>
+          <option value="in_progress">{t('kanban.inProgress')}</option>
+          <option value="done">{t('kanban.done')}</option>
+        </select>
+
         <select
           className={styles.select}
           value={priority}
@@ -61,13 +80,25 @@ export function TaskFilterBar({
           ))}
         </select>
 
-        {(search || priority || assigneeId) && (
+        <div className={styles.dateWrapper}>
+          <input
+            type="date"
+            className={styles.dateInput}
+            value={dueDate}
+            onChange={e => onDueDateChange(e.target.value)}
+            title={t('kanban.dueDate')}
+          />
+        </div>
+
+        {(search || priority || assigneeId || status || dueDate) && (
           <button
             className={styles.clearBtn}
             onClick={() => {
               onSearchChange('')
               onPriorityChange('')
               onAssigneeChange('')
+              onStatusChange('')
+              onDueDateChange('')
             }}
           >
             {t('kanban.clearFilters')}

@@ -84,6 +84,8 @@ export default function ProjectDetailPage() {
   const [search, setSearch] = useState('')
   const [priority, setPriority] = useState('')
   const [assigneeId, setAssigneeId] = useState('')
+  const [status, setStatus] = useState('')
+  const [dueDate, setDueDate] = useState('')
 
   const { data: project, isLoading } = useProject(projectId)
   const { data: stats } = useProjectStats(projectId)
@@ -169,6 +171,10 @@ export default function ProjectDetailPage() {
         onPriorityChange={setPriority}
         assigneeId={assigneeId}
         onAssigneeChange={setAssigneeId}
+        status={status}
+        onStatusChange={setStatus}
+        dueDate={dueDate}
+        onDueDateChange={setDueDate}
         members={project.members || []}
       />
 
@@ -176,7 +182,7 @@ export default function ProjectDetailPage() {
         projectId={projectId} 
         canEdit={canEdit} 
         members={project.members || []} 
-        filters={{ search, priority, assignee_id: assigneeId }}
+        filters={{ search, priority, assignee_id: assigneeId, status, due_date: dueDate }}
       />
     </div>
   )

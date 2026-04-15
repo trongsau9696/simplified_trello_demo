@@ -65,6 +65,14 @@ class TaskRepository
             $query->where('assignee_id', (int) $filters['assignee_id']);
         }
 
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['due_date'])) {
+            $query->whereDate('due_date', $filters['due_date']);
+        }
+
         $tasks = $query->orderBy('position')->get();
 
         return [

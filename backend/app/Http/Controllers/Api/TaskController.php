@@ -37,7 +37,7 @@ class TaskController extends Controller
     {
         $this->authorize('view', $project);
 
-        $filters = $request->only(['search', 'priority', 'assignee_id']);
+        $filters = $request->only(['search', 'priority', 'assignee_id', 'status', 'due_date']);
         $grouped = $this->taskRepository->groupedByStatus($project, $filters);
 
         return response()->json([
