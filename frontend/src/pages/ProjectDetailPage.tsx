@@ -79,7 +79,7 @@ export default function ProjectDetailPage() {
   const projectId = Number(id)
   const [isEditingProject, setIsEditingProject] = useState(false)
   const [isInvitingMember, setIsInvitingMember] = useState(false)
-  
+
   // Filters
   const [search, setSearch] = useState('')
   const [priority, setPriority] = useState('')
@@ -178,10 +178,10 @@ export default function ProjectDetailPage() {
         members={project.members || []}
       />
 
-      <KanbanBoard 
-        projectId={projectId} 
-        canEdit={canEdit} 
-        members={project.members || []} 
+      <KanbanBoard
+        projectId={projectId}
+        canEdit={canEdit}
+        members={project.members || []}
         filters={{ search, priority, assignee_id: assigneeId, status, due_date: dueDate }}
       />
     </div>

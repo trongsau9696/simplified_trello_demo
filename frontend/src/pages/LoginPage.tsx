@@ -9,7 +9,7 @@ import styles from './AuthPage.module.css'
 
 export default function LoginPage() {
   const { t } = useTranslation()
-  
+
   const schema = z.object({
     email: z.string().email(t('auth.errors.invalidEmail')),
     password: z.string().min(8, t('auth.errors.minPassword')),

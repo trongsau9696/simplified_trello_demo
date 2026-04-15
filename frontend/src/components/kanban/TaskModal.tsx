@@ -272,7 +272,9 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                 />
               ) : (
                 <span className={styles.sideValue}>
-                  {task.due_date ? format(new Date(task.due_date), 'PPP') : t('project.stats.overdue')}
+                  {task.due_date
+                    ? format(new Date(task.due_date), 'PPP')
+                    : t('project.stats.overdue')}
                 </span>
               )}
             </div>

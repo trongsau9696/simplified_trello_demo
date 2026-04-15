@@ -85,7 +85,7 @@ class TaskService
         }
     }
 
-    /** @param array<int, int> $taskPositions [id => position] */
+    /** @param  array<int, int>  $taskPositions [id => position] */
     public function reorderTasks(Project $project, array $taskPositions): void
     {
         foreach ($taskPositions as $id => $position) {

@@ -46,16 +46,16 @@ export function TaskStatusChart({ data }: Props) {
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip 
-              contentStyle={{ 
-                borderRadius: '12px', 
-                border: 'none', 
+            <Tooltip
+              contentStyle={{
+                borderRadius: '12px',
+                border: 'none',
                 boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
                 background: 'var(--bg-secondary)',
-                color: 'var(--text)'
+                color: 'var(--text)',
               }}
             />
-            <Legend verticalAlign="bottom" height={36}/>
+            <Legend verticalAlign="bottom" height={36} />
           </PieChart>
         </ResponsiveContainer>
       </div>

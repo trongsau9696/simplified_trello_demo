@@ -42,9 +42,9 @@ class TaskRepository
         return $query->cursorPaginate($perPage);
     }
 
-    /** 
-     * @param array<string, mixed> $filters
-     * @return array<string, Task[]> Grouped by status for Kanban 
+    /**
+     * @param  array<string, mixed>  $filters
+     * @return array<string, Task[]> Grouped by status for Kanban
      */
     public function groupedByStatus(Project $project, array $filters = []): array
     {

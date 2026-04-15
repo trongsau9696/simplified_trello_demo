@@ -79,7 +79,7 @@ export function KanbanBoard({ projectId, canEdit, members, filters = {} }: Props
 
     const activeId = Number(active.id)
     const overId = over.id
-    
+
     // 1. Determine target status
     let newStatus: TaskStatus
     if (['todo', 'in_progress', 'done'].includes(overId as string)) {
@@ -108,7 +108,7 @@ export function KanbanBoard({ projectId, canEdit, members, filters = {} }: Props
       if (activeId !== Number(overId)) {
         const oldIndex = board[currentStatus].findIndex(t => t.id === activeId)
         const newIndex = board[currentStatus].findIndex(t => t.id === Number(overId))
-        
+
         const newTasks = [...board[currentStatus]]
         const [movedTask] = newTasks.splice(oldIndex, 1)
         newTasks.splice(newIndex, 0, movedTask)
@@ -136,7 +136,7 @@ export function KanbanBoard({ projectId, canEdit, members, filters = {} }: Props
       >
         <div className={styles.board} role="main" aria-label="Kanban board">
           {COLUMNS.map(col => (
-              <KanbanColumn
+            <KanbanColumn
               key={col.id}
               id={col.id}
               label={t(`kanban.${col.id === 'in_progress' ? 'inProgress' : col.id}`)}

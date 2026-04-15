@@ -17,13 +17,16 @@ export default function DashboardPage() {
   const { logout } = useAuth()
 
   const projects = data?.data ?? []
-  
+
   // Aggregate stats for chart
-  const stats = projects.reduce((acc, p) => ({
-    todo: acc.todo + (p.todo_tasks_count || 0),
-    in_progress: acc.in_progress + (p.in_progress_tasks_count || 0),
-    done: acc.done + (p.done_tasks_count || 0)
-  }), { todo: 0, in_progress: 0, done: 0 })
+  const stats = projects.reduce(
+    (acc, p) => ({
+      todo: acc.todo + (p.todo_tasks_count || 0),
+      in_progress: acc.in_progress + (p.in_progress_tasks_count || 0),
+      done: acc.done + (p.done_tasks_count || 0),
+    }),
+    { todo: 0, in_progress: 0, done: 0 }
+  )
 
   const totalTasks = stats.todo + stats.in_progress + stats.done
 
@@ -50,7 +53,8 @@ export default function DashboardPage() {
             <label>{t('nav.settings')}</label>
             <div className={styles.navItemInner}>
               <div className={styles.navItemLabelGroup}>
-                <span className={styles.navIcon}>🌐</span> {t('kanban.allStatuses').split(' ')[1] === 'Statuses' ? 'Language' : 'Ngôn ngữ'}
+                <span className={styles.navIcon}>🌐</span>{' '}
+                {t('kanban.allStatuses').split(' ')[1] === 'Statuses' ? 'Language' : 'Ngôn ngữ'}
               </div>
               <LanguageSwitcher />
             </div>
@@ -81,9 +85,7 @@ export default function DashboardPage() {
         <header className={styles.hero}>
           <div className={styles.heroContent}>
             <h1>{t('dashboard.welcome', { name: (user?.name || 'User').split(' ')[0] })} 👏</h1>
-            <p>
-              {t('dashboard.summary', { projects: projects.length, tasks: totalTasks })}
-            </p>
+            <p>{t('dashboard.summary', { projects: projects.length, tasks: totalTasks })}</p>
             <div className={styles.heroActions}>
               <Link to="/projects" className={styles.primaryBtn}>
                 {t('dashboard.manageProjects')}
@@ -115,23 +117,29 @@ export default function DashboardPage() {
           </div>
 
           <div className={styles.dashboardGrid}>
-             <TaskStatusChart data={stats} />
-             
-             <div className={styles.welcomeStats}>
-                <h3>{t('dashboard.summaryWidget.title')}</h3>
-                <div className={styles.summaryItem}>
-                   <span className={styles.summaryDot} style={{ background: '#6366f1' }}/>
-                   <span>{t('dashboard.summaryWidget.todo')}: {stats.todo}</span>
-                </div>
-                <div className={styles.summaryItem}>
-                   <span className={styles.summaryDot} style={{ background: '#f59e0b' }}/>
-                   <span>{t('dashboard.summaryWidget.inProgress')}: {stats.in_progress}</span>
-                </div>
-                <div className={styles.summaryItem}>
-                   <span className={styles.summaryDot} style={{ background: '#10b981' }}/>
-                   <span>{t('dashboard.summaryWidget.done')}: {stats.done}</span>
-                </div>
-             </div>
+            <TaskStatusChart data={stats} />
+
+            <div className={styles.welcomeStats}>
+              <h3>{t('dashboard.summaryWidget.title')}</h3>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryDot} style={{ background: '#6366f1' }} />
+                <span>
+                  {t('dashboard.summaryWidget.todo')}: {stats.todo}
+                </span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryDot} style={{ background: '#f59e0b' }} />
+                <span>
+                  {t('dashboard.summaryWidget.inProgress')}: {stats.in_progress}
+                </span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryDot} style={{ background: '#10b981' }} />
+                <span>
+                  {t('dashboard.summaryWidget.done')}: {stats.done}
+                </span>
+              </div>
+            </div>
           </div>
 
           {isLoading ? (
@@ -154,7 +162,9 @@ export default function DashboardPage() {
               {projects.slice(0, 6).map(p => (
                 <Link key={p.id} to={`/projects/${p.id}`} className={styles.projectCard}>
                   <div className={styles.cardHeader}>
-                    <span className={`${styles.roleBadge} ${styles[p.my_role || 'viewer']}`}>{p.my_role || 'viewer'}</span>
+                    <span className={`${styles.roleBadge} ${styles[p.my_role || 'viewer']}`}>
+                      {p.my_role || 'viewer'}
+                    </span>
                     <span className={styles.taskCount}>{p.tasks_count} tasks</span>
                   </div>
                   <h3>{p.name}</h3>
