@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
+import { useTranslation } from 'react-i18next'
 import styles from './TaskStatusChart.module.css'
 
 interface Props {
@@ -10,10 +11,12 @@ interface Props {
 }
 
 export function TaskStatusChart({ data }: Props) {
+  const { t } = useTranslation()
+
   const chartData = [
-    { name: 'To Do', value: data.todo, color: '#6366f1' },
-    { name: 'In Progress', value: data.in_progress, color: '#f59e0b' },
-    { name: 'Done', value: data.done, color: '#10b981' },
+    { name: t('dashboard.summaryWidget.todo'), value: data.todo, color: '#6366f1' },
+    { name: t('dashboard.summaryWidget.inProgress'), value: data.in_progress, color: '#f59e0b' },
+    { name: t('dashboard.summaryWidget.done'), value: data.done, color: '#10b981' },
   ].filter(d => d.value > 0)
 
   if (chartData.length === 0) {
@@ -26,7 +29,7 @@ export function TaskStatusChart({ data }: Props) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>All Projects Progress</h3>
+      <h3 className={styles.title}>{t('dashboard.chart.title')}</h3>
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
