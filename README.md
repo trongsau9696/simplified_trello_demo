@@ -2,7 +2,42 @@
 
 > Senior Developer Technical Test | Laravel 11 + React 18 | 100 pts
 
-[![CI](https://github.com/your-username/simplified_trello_demo/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/simplified_trello_demo/actions)
+[![CI](https://github.com/trongsau9696/simplified_trello_demo/actions/workflows/ci.yml/badge.svg)](https://github.com/trongsau9696/simplified_trello_demo/actions)
+
+## ✨ Features
+
+### Core Functionality
+- **Kanban Board** — Drag-and-drop tasks across columns (Backlog → In Progress → In Review → Done)
+- **Project Management** — Create, update, and archive projects with soft delete support
+- **Task Management** — Create, assign, prioritize (Low/Medium/High), and track tasks with due dates
+- **Role-Based Access Control** — Owner, Editor, and Viewer roles with fine-grained permission enforcement
+- **Member Management** — Invite members to projects; restrict task creation/editing by role
+
+### Real-Time & UX
+- **Real-Time Updates** — Live task status sync via Laravel Reverb (WebSocket) using private channels
+- **Optimistic UI** — Task moves update instantly; background sync keeps data consistent
+- **Assignee Validation** — Task assignees must be verified project members
+- **PDF Export** — Generate a printable project report with task breakdown
+
+### Security & Reliability
+- **Sanctum Token Auth** — Stateless API tokens for SPA authentication
+- **Private Broadcast Channels** — WebSocket events restricted to authorized users only
+- **Rate Limiting** — Auth routes throttled at 10 requests/minute
+- **Soft Deletes** — Projects and tasks are recoverable, not permanently lost
+
+---
+
+## 📸 Screenshots
+
+| Login | Dashboard |
+|-------|-----------|
+| ![Login Page](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+
+**Kanban Board**
+
+![Kanban Board](docs/screenshots/kanban.png)
+
+---
 
 ## 🚀 Quick Start (< 5 minutes)
 
@@ -12,7 +47,7 @@
 ### Setup
 
 ```bash
-git clone https://github.com/your-username/simplified_trello_demo.git
+git clone https://github.com/trongsau9696/simplified_trello_demo.git
 cd simplified_trello_demo
 
 # Start all services (PHP 8.3, Nginx, MySQL 8, Redis 7.2, Node 18)
@@ -91,16 +126,6 @@ docker compose exec app ./vendor/bin/pint --test
 docker compose exec app ./vendor/bin/phpstan analyse
 docker compose exec node npm run lint
 ```
-
-## 📊 Scoring
-
-| Area | Score |
-|------|-------|
-| Day 1 - Laravel API | 35/35 |
-| Day 2 - React Frontend | 35/35 |
-| Day 3 - Quality & DevOps | 30/30 |
-| **Total** | **100/100** |
-| Bonus (PDF, WebSockets, Dark Mode) | +9 |
 
 ## ⚠️ Security Notes
 - API keys and secrets are **never committed** — use `.env` (not versioned)
