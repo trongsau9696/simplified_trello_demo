@@ -49,11 +49,16 @@ export default function DashboardPage() {
           <div className={styles.navGroup}>
             <label>{t('nav.settings')}</label>
             <div className={styles.navItemInner}>
-              <span className={styles.navIcon}>🌓</span> {t('nav.appearance')}
-              <div style={{display: 'flex', gap: '0.5rem'}}>
-                 <LanguageSwitcher />
-                 <ThemeToggle />
+              <div className={styles.navItemLabelGroup}>
+                <span className={styles.navIcon}>🌐</span> {t('kanban.allStatuses').split(' ')[1] === 'Statuses' ? 'Language' : 'Ngôn ngữ'}
               </div>
+              <LanguageSwitcher />
+            </div>
+            <div className={styles.navItemInner}>
+              <div className={styles.navItemLabelGroup}>
+                <span className={styles.navIcon}>🌓</span> {t('nav.appearance')}
+              </div>
+              <ThemeToggle />
             </div>
           </div>
         </nav>

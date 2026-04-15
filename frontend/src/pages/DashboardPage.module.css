@@ -56,13 +56,14 @@
 }
 
 .navGroup label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: var(--text-muted);
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  padding-left: 0.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  opacity: 0.7;
 }
 
 .navItem {
@@ -98,9 +99,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   color: var(--text-subtle);
   font-size: 0.9375rem;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.navItemInner:hover {
+  background: var(--surface);
+}
+
+.navItemLabelGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 /* ─── User Section ────────────────────────────────────── */
@@ -466,6 +479,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
 }
 
 .welcomeStats h3 {
