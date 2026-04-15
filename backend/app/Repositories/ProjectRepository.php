@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\CursorPaginator;
-use Illuminate\Database\Eloquent\Collection;
 
 class ProjectRepository
 {
@@ -19,7 +18,7 @@ class ProjectRepository
             ->with(['owner:id,name,email', 'members:id,name'])
             ->withCount([
                 'tasks',
-                'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done')
+                'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done'),
             ])
             ->latest()
             ->cursorPaginate($perPage);

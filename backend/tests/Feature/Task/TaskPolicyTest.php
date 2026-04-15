@@ -14,16 +14,16 @@ class TaskPolicyTest extends TestCase
 
     public function test_viewer_cannot_delete_task(): void
     {
-        $owner  = User::factory()->create();
+        $owner = User::factory()->create();
         $viewer = User::factory()->create();
         $this->actingAs($viewer, 'sanctum');
 
         $project = Project::factory()->create(['owner_id' => $owner->id]);
-        $project->members()->attach($owner->id,  ['role' => 'owner']);
+        $project->members()->attach($owner->id, ['role' => 'owner']);
         $project->members()->attach($viewer->id, ['role' => 'viewer']);
 
         $task = Task::factory()->create([
-            'project_id'  => $project->id,
+            'project_id' => $project->id,
             'assignee_id' => $owner->id, // Not the viewer
         ]);
 
@@ -33,18 +33,18 @@ class TaskPolicyTest extends TestCase
 
     public function test_viewer_can_update_own_assigned_task(): void
     {
-        $owner  = User::factory()->create();
+        $owner = User::factory()->create();
         $viewer = User::factory()->create();
         $this->actingAs($viewer, 'sanctum');
 
         $project = Project::factory()->create(['owner_id' => $owner->id]);
-        $project->members()->attach($owner->id,  ['role' => 'owner']);
+        $project->members()->attach($owner->id, ['role' => 'owner']);
         $project->members()->attach($viewer->id, ['role' => 'viewer']);
 
         $task = Task::factory()->create([
-            'project_id'  => $project->id,
+            'project_id' => $project->id,
             'assignee_id' => $viewer->id,
-            'status'      => 'todo',
+            'status' => 'todo',
         ]);
 
         $this->patchJson("/api/tasks/{$task->id}/status", ['status' => 'in_progress'])
@@ -53,16 +53,16 @@ class TaskPolicyTest extends TestCase
 
     public function test_editor_can_update_any_task(): void
     {
-        $owner  = User::factory()->create();
+        $owner = User::factory()->create();
         $editor = User::factory()->create();
         $this->actingAs($editor, 'sanctum');
 
         $project = Project::factory()->create(['owner_id' => $owner->id]);
-        $project->members()->attach($owner->id,  ['role' => 'owner']);
+        $project->members()->attach($owner->id, ['role' => 'owner']);
         $project->members()->attach($editor->id, ['role' => 'editor']);
 
         $task = Task::factory()->create([
-            'project_id'  => $project->id,
+            'project_id' => $project->id,
             'assignee_id' => $owner->id,
         ]);
 

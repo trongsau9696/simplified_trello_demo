@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { taskApi, commentApi } from '@/api/projects'
-import type { KanbanBoard, Task, TaskStatus } from '@/types'
+import type { KanbanBoard, Task, TaskStatus, ApiError } from '@/types'
+import { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 
 export function useUpdateTaskStatus(projectId: number) {
@@ -70,8 +71,9 @@ export function useDeleteTask(projectId: number) {
       qc.invalidateQueries({ queryKey: ['projects', projectId, 'kanban'] })
       toast.success('Task deleted')
     },
-    onError: (err: any) => {
-      const msg = err.response?.data?.message || 'Failed to delete task'
+    onError: (err: unknown) => {
+      const axiosError = err as AxiosError<ApiError>
+      const msg = axiosError.response?.data?.message || 'Failed to delete task'
       toast.error(msg)
     }
   })
@@ -94,13 +96,15 @@ export function useUpdateTask(projectId: number) {
     onSuccess: (_, variables) => {
       qc.invalidateQueries({ queryKey: ['tasks', variables.id] })
       qc.invalidateQueries({ queryKey: ['projects', projectId, 'kanban'] })
+      toast.success('Task updated!')
     },
-    onError: (err: any) => {
+    onError: (err: unknown) => {
+      const axiosError = err as AxiosError<ApiError>
       const message =
-        err.response?.data?.message ||
-        Object.values(err.response?.data?.errors ?? {}).flat().join(', ') ||
+        axiosError.response?.data?.message ||
+        Object.values(axiosError.response?.data?.errors ?? {}).flat().join(', ') ||
         'Failed to update task'
-      toast.error(message as string)
+      toast.error(message)
     },
   })
 }
@@ -108,7 +112,10 @@ export function useUpdateTask(projectId: number) {
 export function useComments(taskId: number | null) {
   return useQuery({
     queryKey: ['tasks', taskId, 'comments'],
-    queryFn: () => commentApi.list(taskId!),
+    queryFn: async () => {
+      const res = await commentApi.list(taskId!)
+      return res.data
+    },
     enabled: !!taskId,
   })
 }

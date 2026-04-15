@@ -20,6 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 60px; /* Ensures all headers align regardless of buttons */
 }
 
 .title {

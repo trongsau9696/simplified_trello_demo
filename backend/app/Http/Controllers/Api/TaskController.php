@@ -20,14 +20,15 @@ class TaskController extends Controller
     public function __construct(
         private readonly TaskRepository $taskRepository,
         private readonly TaskService $taskService,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request, Project $project): AnonymousResourceCollection
     {
         $this->authorize('view', $project);
 
         $filters = $request->only(['status', 'priority', 'assignee_id', 'due_date', 'sort_by', 'sort_order']);
-        $tasks   = $this->taskRepository->paginateForProject($project, $filters);
+        $tasks = $this->taskRepository->paginateForProject($project, $filters);
 
         return TaskResource::collection($tasks);
     }
@@ -40,9 +41,9 @@ class TaskController extends Controller
 
         return response()->json([
             'data' => [
-                'todo'        => TaskResource::collection($grouped['todo']),
+                'todo' => TaskResource::collection($grouped['todo']),
                 'in_progress' => TaskResource::collection($grouped['in_progress']),
-                'done'        => TaskResource::collection($grouped['done']),
+                'done' => TaskResource::collection($grouped['done']),
             ],
         ]);
     }

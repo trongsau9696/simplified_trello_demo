@@ -11,7 +11,8 @@ class ProjectService
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
-    ) {}
+    ) {
+    }
 
     public function create(array $data, User $owner): Project
     {
@@ -48,25 +49,26 @@ class ProjectService
     {
         $tasks = $project->tasks()->withTrashed(false)->get();
 
-        $total       = $tasks->count();
-        $done        = $tasks->where('status', 'done')->count();
-        $overdue     = $tasks->filter(fn (mixed $t) => method_exists($t, 'isOverdue') && $t->isOverdue())->count();
-        $inProgress  = $tasks->where('status', 'in_progress')->count();
+        $total = $tasks->count();
+        $done = $tasks->where('status', 'done')->count();
+        $overdue = $tasks->filter(fn (mixed $t) => method_exists($t, 'isOverdue') && $t->isOverdue())->count();
+        $inProgress = $tasks->where('status', 'in_progress')->count();
 
         return [
-            'total'           => $total,
-            'done'            => $done,
-            'in_progress'     => $inProgress,
-            'todo'            => $tasks->where('status', 'todo')->count(),
-            'overdue'         => $overdue,
+            'total' => $total,
+            'done' => $done,
+            'in_progress' => $inProgress,
+            'todo' => $tasks->where('status', 'todo')->count(),
+            'overdue' => $overdue,
             'completion_rate' => $total > 0 ? round(($done / $total) * 100, 1) : 0,
         ];
     }
+
     public function removeMember(Project $project, int $userId): void
     {
         // Don't allow removing the owner
         if ($project->owner_id === $userId) {
-            throw new \InvalidArgumentException("Cannot remove the project owner.");
+            throw new \InvalidArgumentException('Cannot remove the project owner.');
         }
 
         $this->projectRepository->removeMember($project, $userId);

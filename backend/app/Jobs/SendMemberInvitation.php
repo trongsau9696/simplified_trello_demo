@@ -18,7 +18,8 @@ class SendMemberInvitation implements ShouldQueue
     public function __construct(
         public readonly Project $project,
         public readonly User $user,
-    ) {}
+    ) {
+    }
 
     public function handle(): void
     {

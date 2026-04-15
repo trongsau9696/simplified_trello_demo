@@ -20,7 +20,8 @@ class ProjectController extends Controller
     public function __construct(
         private readonly ProjectRepository $projectRepository,
         private readonly ProjectService $projectService,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -82,6 +83,7 @@ class ProjectController extends Controller
 
         try {
             $this->projectService->removeMember($project, $userId);
+
             return response()->json(['message' => 'Member removed successfully'], 200);
         } catch (\InvalidArgumentException $e) {
             return response()->json(['message' => $e->getMessage()], 422);

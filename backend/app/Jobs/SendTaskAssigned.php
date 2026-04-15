@@ -18,7 +18,8 @@ class SendTaskAssigned implements ShouldQueue
     public function __construct(
         public readonly Task $task,
         public readonly User $assignee,
-    ) {}
+    ) {
+    }
 
     public function handle(): void
     {

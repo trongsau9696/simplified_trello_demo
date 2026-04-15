@@ -16,7 +16,7 @@ class InviteMemberRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'exists:users,email'],
-            'role'  => ['required', 'in:editor,viewer'],
+            'role' => ['required', 'in:editor,viewer'],
         ];
     }
 }

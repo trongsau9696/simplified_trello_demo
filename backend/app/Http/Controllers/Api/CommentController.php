@@ -31,7 +31,7 @@ class CommentController extends Controller
 
         $comment = $task->comments()->create([
             'user_id' => $request->user()->id,
-            'body'    => $request->body,
+            'body' => $request->body,
         ]);
 
         $comment->load('user');

@@ -12,7 +12,8 @@ class ReportController extends Controller
 {
     public function __construct(
         private readonly ProjectService $projectService,
-    ) {}
+    ) {
+    }
 
     public function projectPdf(Project $project): Response
     {
@@ -20,18 +21,18 @@ class ReportController extends Controller
 
         $project->load(['owner', 'members', 'tasks.assignee']);
 
-        $stats   = $this->projectService->getStats($project);
-        $tasks   = $project->tasks()->with('assignee')->orderBy('status')->orderBy('position')->get();
+        $stats = $this->projectService->getStats($project);
+        $tasks = $project->tasks()->with('assignee')->orderBy('status')->orderBy('position')->get();
         $members = $project->members;
 
         $pdf = Pdf::loadView('pdf.project-report', compact('project', 'stats', 'tasks', 'members'))
             ->setPaper('a4', 'portrait')
             ->setOptions([
-                'dpi'                       => 150,
-                'defaultFont'               => 'DejaVu Sans',
-                'isRemoteEnabled'           => false,
-                'isHtml5ParserEnabled'      => true,
-                'isFontSubsettingEnabled'   => true,
+                'dpi' => 150,
+                'defaultFont' => 'DejaVu Sans',
+                'isRemoteEnabled' => false,
+                'isHtml5ParserEnabled' => true,
+                'isFontSubsettingEnabled' => true,
             ]);
 
         $filename = 'project-' . $project->id . '-report-' . now()->format('Ymd') . '.pdf';

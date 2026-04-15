@@ -13,9 +13,9 @@ class AuthTest extends TestCase
     public function test_user_can_register(): void
     {
         $response = $this->postJson('/api/auth/register', [
-            'name'                  => 'Test User',
-            'email'                 => 'test@example.com',
-            'password'              => 'password123',
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 
@@ -30,7 +30,7 @@ class AuthTest extends TestCase
         $user = User::factory()->create(['password' => bcrypt('password123')]);
 
         $response = $this->postJson('/api/auth/login', [
-            'email'    => $user->email,
+            'email' => $user->email,
             'password' => 'password123',
         ]);
 
@@ -43,7 +43,7 @@ class AuthTest extends TestCase
         User::factory()->create(['email' => 'test@example.com']);
 
         $this->postJson('/api/auth/login', [
-            'email'    => 'test@example.com',
+            'email' => 'test@example.com',
             'password' => 'wrong',
         ])->assertUnprocessable();
     }

@@ -2,10 +2,9 @@
 
 namespace App\Events;
 
-use App\Http\Resources\TaskResource;
 use App\Models\Task;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +15,8 @@ class TaskStatusUpdated implements ShouldBroadcast
 
     public function __construct(
         public readonly Task $task,
-    ) {}
+    ) {
+    }
 
     public function broadcastOn(): PrivateChannel
     {
@@ -32,7 +32,7 @@ class TaskStatusUpdated implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'id'     => $this->task->id,
+            'id' => $this->task->id,
             'status' => $this->task->status,
             'position' => $this->task->position,
         ];

@@ -7,10 +7,11 @@ import { SkeletonPage } from '@/components/ui/SkeletonLoader'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { EditProjectModal } from '@/components/project/EditProjectModal'
 import { InviteMemberModal } from '@/components/project/InviteMemberModal'
+import type { User } from '@/types'
 import styles from './ProjectDetailPage.module.css'
 
-function MemberList({ members, isOwner, onRemove }: { members: any[], isOwner: boolean, onRemove: (id: number) => void }) {
-  const handleRemove = (member: any) => {
+function MemberList({ members, isOwner, onRemove }: { members: User[], isOwner: boolean, onRemove: (id: number) => void }) {
+  const handleRemove = (member: User) => {
     if (!isOwner) return
     if (confirm(`Remove ${member.name} from project?`)) {
       onRemove(member.id)
@@ -140,7 +141,7 @@ export default function ProjectDetailPage() {
         </div>
       )}
 
-      <KanbanBoard projectId={projectId} canEdit={canEdit} />
+      <KanbanBoard projectId={projectId} canEdit={canEdit} members={project.members || []} />
     </div>
   )
 }

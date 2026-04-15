@@ -24,7 +24,7 @@ class ProjectCRUDTest extends TestCase
         $this->actingAsUser();
 
         $this->postJson('/api/projects', [
-            'name'        => 'My Project',
+            'name' => 'My Project',
             'description' => 'A test project',
         ])->assertCreated()
             ->assertJsonPath('name', 'My Project');
@@ -57,12 +57,12 @@ class ProjectCRUDTest extends TestCase
 
     public function test_non_owner_cannot_delete_project(): void
     {
-        $owner  = User::factory()->create();
+        $owner = User::factory()->create();
         $member = User::factory()->create();
         $this->actingAs($member, 'sanctum');
 
         $project = Project::factory()->create(['owner_id' => $owner->id]);
-        $project->members()->attach($owner->id,  ['role' => 'owner']);
+        $project->members()->attach($owner->id, ['role' => 'owner']);
         $project->members()->attach($member->id, ['role' => 'editor']);
 
         $this->deleteJson("/api/projects/{$project->id}")

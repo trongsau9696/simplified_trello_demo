@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // ─── Policies ────────────────────────────────────────────
         Gate::policy(Project::class, ProjectPolicy::class);
-        Gate::policy(Task::class,    TaskPolicy::class);
+        Gate::policy(Task::class, TaskPolicy::class);
         Gate::policy(Comment::class, CommentPolicy::class);
 
         // ─── Rate Limiters ────────────────────────────────────────

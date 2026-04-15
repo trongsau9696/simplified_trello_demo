@@ -15,20 +15,20 @@ class DatabaseSeeder extends Seeder
     {
         // ─── Demo users ──────────────────────────────────────────
         $owner = User::factory()->create([
-            'name'     => 'Alice Owner',
-            'email'    => 'alice@example.com',
+            'name' => 'Alice Owner',
+            'email' => 'alice@example.com',
             'password' => Hash::make('password'),
         ]);
 
         $editor = User::factory()->create([
-            'name'     => 'Bob Editor',
-            'email'    => 'bob@example.com',
+            'name' => 'Bob Editor',
+            'email' => 'bob@example.com',
             'password' => Hash::make('password'),
         ]);
 
         $viewer = User::factory()->create([
-            'name'     => 'Carol Viewer',
-            'email'    => 'carol@example.com',
+            'name' => 'Carol Viewer',
+            'email' => 'carol@example.com',
             'password' => Hash::make('password'),
         ]);
 
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
 
             // ─── 4 tasks per project (20 total) ──────────────────
             $tasks = Task::factory(4)->create([
-                'project_id'  => $project->id,
+                'project_id' => $project->id,
                 'assignee_id' => $allMembers->random()->id,
             ]);
 

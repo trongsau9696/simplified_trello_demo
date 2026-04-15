@@ -1,5 +1,7 @@
 import { useMutation, useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 import { projectApi } from '@/api/projects'
+import { AxiosError } from 'axios'
+import { ApiError } from '@/types'
 import toast from 'react-hot-toast'
 
 export function useProjects() {
@@ -95,10 +97,10 @@ export function useRemoveMember(projectId: number) {
       qc.invalidateQueries({ queryKey: ['projects', projectId] })
       toast.success('Member removed')
     },
-    onError: (err: any) => {
-      const msg = err.response?.data?.message || 'Failed to remove member'
+    onError: (err: unknown) => {
+      const axiosError = err as AxiosError<ApiError>
+      const msg = axiosError.response?.data?.message || 'Failed to remove member'
       toast.error(msg)
     }
   })
 }
-

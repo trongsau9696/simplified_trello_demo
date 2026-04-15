@@ -14,7 +14,7 @@ import { useUpdateTaskStatus } from '@/hooks/useTasks'
 import { useProjectChannel } from '@/hooks/useProjectChannel'
 import { useAuthStore } from '@/store/authStore'
 import toast from 'react-hot-toast'
-import type { Task, TaskStatus } from '@/types'
+import type { Task, TaskStatus, User } from '@/types'
 import { KanbanColumn } from './KanbanColumn'
 import { TaskCard } from './TaskCard'
 import { TaskModal } from './TaskModal'
@@ -29,10 +29,11 @@ const COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
 
 interface Props {
   projectId: number
-  canEdit: boolean // Owner/Editor
+  canEdit: boolean 
+  members: User[]
 }
 
-export function KanbanBoard({ projectId, canEdit }: Props) {
+export function KanbanBoard({ projectId, canEdit, members }: Props) {
   const user = useAuthStore(s => s.user)
   const { data: board, isLoading } = useKanban(projectId)
   const updateStatus = useUpdateTaskStatus(projectId)
@@ -40,7 +41,6 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null)
   const [taskCreationStatus, setTaskCreationStatus] = useState<TaskStatus | null>(null)
 
-  // ─── Subscribe to real-time WebSocket events ──────────
   useProjectChannel(projectId)
 
   const sensors = useSensors(
@@ -51,9 +51,11 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
     const { active } = event
     const taskId = Number(active.id)
     
-    const task = Object.values(board ?? {}).flat().find((t: any) => t.id === taskId) as Task | undefined
+    if (!board) return
+    const allTasks = Object.values(board).flat()
+    const task = allTasks.find((t) => t.id === taskId)
+    
     if (task) {
-      // Permission check: Owner/Editor OR Assignee
       const canMove = canEdit || task.assignee_id === user?.id
       if (canMove) {
         setActiveTask(task)
@@ -71,34 +73,33 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
     const { active, over } = event
     setActiveTask(null)
     
-    if (!over) return
+    if (!over || !board) return
 
     const taskId = Number(active.id)
-    const task = Object.values(board ?? {}).flat().find((t: any) => t.id === taskId) as Task | undefined
+    const allTasks = Object.values(board).flat()
+    const task = allTasks.find((t) => t.id === taskId)
     if (!task) return
 
-    // Final permission check before mutation
     const canMove = canEdit || task.assignee_id === user?.id
     if (!canMove) return
 
     let newStatus = over.id as string
 
-    // ─── If we dropped over a task, find which column it belongs to ──────
     if (!['todo', 'in_progress', 'done'].includes(newStatus)) {
       const targetTaskId = Number(over.id)
-      const foundStatus = Object.entries(board ?? {}).find(([, tasks]) =>
-        tasks.some((t: any) => t.id === targetTaskId)
+      const foundStatus = Object.entries(board).find(([, tasks]) =>
+        tasks.some((t) => t.id === targetTaskId)
       )?.[0] as string | undefined
 
       if (foundStatus) {
         newStatus = foundStatus
       } else {
-        return // Could not resolve target status
+        return 
       }
     }
 
-    const currentStatus = Object.entries(board ?? {}).find(([, tasks]) =>
-      tasks.some((t: { id: number }) => t.id === Number(active.id))
+    const currentStatus = Object.entries(board).find(([, tasks]) =>
+      tasks.some((t) => t.id === Number(active.id))
     )?.[0] as TaskStatus | undefined
 
     if (newStatus !== currentStatus) {
@@ -106,7 +107,7 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
     }
   }
 
-  if (isLoading) return <div className={styles.loading} aria-label="Loading kanban board">Loading...</div>
+  if (isLoading) return <div className={styles.loading}>Loading...</div>
 
   return (
     <>
@@ -126,7 +127,6 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
               color={col.color}
               tasks={board?.[col.id] ?? []}
               canEdit={canEdit}
-              projectId={projectId}
               onOpenTask={setActiveTaskId}
               onAddTask={() => setTaskCreationStatus(col.id)}
             />
@@ -148,6 +148,7 @@ export function KanbanBoard({ projectId, canEdit }: Props) {
           projectId={projectId} 
           canEdit={canEdit} 
           onClose={() => setActiveTaskId(null)} 
+          members={members}
         />
       )}
 

@@ -14,7 +14,8 @@ class TaskService
 {
     public function __construct(
         private readonly TaskRepository $taskRepository,
-    ) {}
+    ) {
+    }
 
     public function create(Project $project, array $data, User $creator): Task
     {
@@ -44,8 +45,8 @@ class TaskService
         $statusChanged = isset($data['status']) && $data['status'] !== $task->status;
 
         if (
-            isset($data['assignee_id']) 
-            && $data['assignee_id'] !== null 
+            isset($data['assignee_id'])
+            && $data['assignee_id'] !== null
             && $data['assignee_id'] !== $oldAssigneeId
         ) {
             $this->ensureAssigneeIsMember($task->project, (int) $data['assignee_id']);
@@ -80,7 +81,7 @@ class TaskService
     private function ensureAssigneeIsMember(Project $project, int $userId): void
     {
         if (! $project->members()->where('user_id', $userId)->exists()) {
-            throw new \InvalidArgumentException("The assignee must be a member of the project.");
+            throw new \InvalidArgumentException('The assignee must be a member of the project.');
         }
     }
 }
