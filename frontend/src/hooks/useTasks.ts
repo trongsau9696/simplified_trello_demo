@@ -94,7 +94,13 @@ export function useUpdateTask(projectId: number) {
     onSuccess: (_, variables) => {
       qc.invalidateQueries({ queryKey: ['tasks', variables.id] })
       qc.invalidateQueries({ queryKey: ['projects', projectId, 'kanban'] })
-      toast.success('Task updated')
+    },
+    onError: (err: any) => {
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors ?? {}).flat().join(', ') ||
+        'Failed to update task'
+      toast.error(message as string)
     },
   })
 }
