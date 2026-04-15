@@ -61,6 +61,10 @@ jobs:
         working-directory: backend
         run: php artisan migrate --force
 
+      - name: Create storage directories
+        working-directory: backend
+        run: mkdir -p storage/framework/{sessions,views,cache}
+
       - name: Laravel Pint (lint)
         working-directory: backend
         run: ./vendor/bin/pint --test
