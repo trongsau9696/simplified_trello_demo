@@ -3,26 +3,32 @@ import { vi } from 'vitest'
 
 // Mock Pusher class
 class PusherMock {
-  subscribe() { return { bind: () => {} } }
-  unsubscribe() { }
-  disconnect() { }
+  subscribe() {
+    return { bind: () => {} }
+  }
+  unsubscribe() {}
+  disconnect() {}
 }
 
 // Mock Echo class
 class EchoMock {
-  private() { return { listen: () => {} } }
-  channel() { return { listen: () => {} } }
-  leaveChannel() { }
-  leave() { }
-  disconnect() { }
+  private() {
+    return { listen: () => {} }
+  }
+  channel() {
+    return { listen: () => {} }
+  }
+  leaveChannel() {}
+  leave() {}
+  disconnect() {}
 }
 
 vi.mock('pusher-js', () => ({
-  default: PusherMock
+  default: PusherMock,
 }))
 
 vi.mock('laravel-echo', () => ({
-  default: EchoMock
+  default: EchoMock,
 }))
 
 // Ensure window properties are set for libraries that expect them globally

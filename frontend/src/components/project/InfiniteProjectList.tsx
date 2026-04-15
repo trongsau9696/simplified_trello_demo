@@ -5,13 +5,7 @@ import { SkeletonCard } from '@/components/ui/SkeletonLoader'
 import styles from './InfiniteProjectList.module.css'
 
 export function InfiniteProjectList() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useInfiniteProjects()
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteProjects()
 
   // ─── Intersection Observer sentinel ──────────────────────
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -36,7 +30,14 @@ export function InfiniteProjectList() {
   // Flatten pages → flat array of projects
   const projects = data?.pages.flatMap(p => p.data) ?? []
 
-  if (isLoading) return <><SkeletonCard /><SkeletonCard /><SkeletonCard /></>
+  if (isLoading)
+    return (
+      <>
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </>
+    )
 
   return (
     <div className={styles.wrapper}>

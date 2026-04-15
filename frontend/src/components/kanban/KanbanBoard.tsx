@@ -22,14 +22,14 @@ import { CreateTaskModal } from './CreateTaskModal'
 import styles from './KanbanBoard.module.css'
 
 const COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
-  { id: 'todo',        label: 'To Do',       color: '#6366f1' },
-  { id: 'in_progress', label: 'In Progress',  color: '#f59e0b' },
-  { id: 'done',        label: 'Done',         color: '#10b981' },
+  { id: 'todo', label: 'To Do', color: '#6366f1' },
+  { id: 'in_progress', label: 'In Progress', color: '#f59e0b' },
+  { id: 'done', label: 'Done', color: '#10b981' },
 ]
 
 interface Props {
   projectId: number
-  canEdit: boolean 
+  canEdit: boolean
   members: User[]
 }
 
@@ -43,18 +43,16 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
 
   useProjectChannel(projectId)
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
-  )
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event
     const taskId = Number(active.id)
-    
+
     if (!board) return
     const allTasks = Object.values(board).flat()
-    const task = allTasks.find((t) => t.id === taskId)
-    
+    const task = allTasks.find(t => t.id === taskId)
+
     if (task) {
       const canMove = canEdit || task.assignee_id === user?.id
       if (canMove) {
@@ -72,12 +70,12 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     setActiveTask(null)
-    
+
     if (!over || !board) return
 
     const taskId = Number(active.id)
     const allTasks = Object.values(board).flat()
-    const task = allTasks.find((t) => t.id === taskId)
+    const task = allTasks.find(t => t.id === taskId)
     if (!task) return
 
     const canMove = canEdit || task.assignee_id === user?.id
@@ -88,18 +86,18 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
     if (!['todo', 'in_progress', 'done'].includes(newStatus)) {
       const targetTaskId = Number(over.id)
       const foundStatus = Object.entries(board).find(([, tasks]) =>
-        tasks.some((t) => t.id === targetTaskId)
+        tasks.some(t => t.id === targetTaskId)
       )?.[0] as string | undefined
 
       if (foundStatus) {
         newStatus = foundStatus
       } else {
-        return 
+        return
       }
     }
 
     const currentStatus = Object.entries(board).find(([, tasks]) =>
-      tasks.some((t) => t.id === Number(active.id))
+      tasks.some(t => t.id === Number(active.id))
     )?.[0] as TaskStatus | undefined
 
     if (newStatus !== currentStatus) {
@@ -111,8 +109,8 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
 
   return (
     <>
-      <DndContext 
-        sensors={sensors} 
+      <DndContext
+        sensors={sensors}
         onDragStart={handleDragStart}
         onDragCancel={handleDragCancel}
         onDragEnd={handleDragEnd}
@@ -143,11 +141,11 @@ export function KanbanBoard({ projectId, canEdit, members }: Props) {
       </DndContext>
 
       {activeTaskId && (
-        <TaskModal 
-          taskId={activeTaskId} 
-          projectId={projectId} 
-          canEdit={canEdit} 
-          onClose={() => setActiveTaskId(null)} 
+        <TaskModal
+          taskId={activeTaskId}
+          projectId={projectId}
+          canEdit={canEdit}
+          onClose={() => setActiveTaskId(null)}
           members={members}
         />
       )}

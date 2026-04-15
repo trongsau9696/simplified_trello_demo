@@ -32,7 +32,7 @@ export const projectApi = {
     const res = await api.post(`/projects/${id}/invite`, data)
     return res.data
   },
-  
+
   removeMember: async (id: number, userId: number) => {
     await api.delete(`/projects/${id}/members/${userId}`)
   },

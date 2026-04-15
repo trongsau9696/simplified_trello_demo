@@ -38,10 +38,12 @@ export function InviteMemberModal({ projectId, onClose }: Props) {
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>Invite Member</h2>
-          <button className={styles.closeBtn} onClick={onClose}>×</button>
+          <button className={styles.closeBtn} onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -69,11 +71,7 @@ export function InviteMemberModal({ projectId, onClose }: Props) {
             <button type="button" onClick={onClose} className={styles.cancelBtn}>
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={inviteMember.isPending}
-              className={styles.saveBtn}
-            >
+            <button type="submit" disabled={inviteMember.isPending} className={styles.saveBtn}>
               {inviteMember.isPending ? 'Sending Invite...' : 'Send Invitation'}
             </button>
           </div>

@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import styles from './AuthPage.module.css'
 
 const schema = z.object({
-  email:    z.string().email('Invalid email'),
+  email: z.string().email('Invalid email'),
   password: z.string().min(8, 'Min 8 characters'),
 })
 
@@ -16,7 +16,11 @@ export default function LoginPage() {
   const { login, isLoggingIn } = useAuth()
   const navigate = useNavigate()
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 

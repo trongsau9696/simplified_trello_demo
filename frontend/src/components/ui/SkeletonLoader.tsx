@@ -13,7 +13,9 @@ export function SkeletonCard() {
 export function SkeletonPage() {
   return (
     <div className={styles.page}>
-      {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
+      {[1, 2, 3].map(i => (
+        <SkeletonCard key={i} />
+      ))}
     </div>
   )
 }

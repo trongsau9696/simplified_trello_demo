@@ -10,7 +10,15 @@ import { InviteMemberModal } from '@/components/project/InviteMemberModal'
 import type { User } from '@/types'
 import styles from './ProjectDetailPage.module.css'
 
-function MemberList({ members, isOwner, onRemove }: { members: User[], isOwner: boolean, onRemove: (id: number) => void }) {
+function MemberList({
+  members,
+  isOwner,
+  onRemove,
+}: {
+  members: User[]
+  isOwner: boolean
+  onRemove: (id: number) => void
+}) {
   const handleRemove = (member: User) => {
     if (!isOwner) return
     if (confirm(`Remove ${member.name} from project?`)) {
@@ -21,18 +29,16 @@ function MemberList({ members, isOwner, onRemove }: { members: User[], isOwner: 
   return (
     <div className={styles.memberList}>
       {members.slice(0, 5).map(m => (
-        <span 
-          key={m.id} 
-          className={`${styles.memberAvatar} ${isOwner ? styles.clickable : ''}`} 
+        <span
+          key={m.id}
+          className={`${styles.memberAvatar} ${isOwner ? styles.clickable : ''}`}
           title={isOwner ? `Remove ${m.name}` : m.name}
           onClick={() => handleRemove(m)}
         >
           {m.name[0]}
         </span>
       ))}
-      {members.length > 5 && (
-        <span className={styles.memberAvatarMore}>+{members.length - 5}</span>
-      )}
+      {members.length > 5 && <span className={styles.memberAvatarMore}>+{members.length - 5}</span>}
     </div>
   )
 }
@@ -54,7 +60,11 @@ function ExportPdfButton({ projectId }: { projectId: number }) {
   }
 
   return (
-    <button className={styles.exportBtn} onClick={handleExport} aria-label="Export project report as PDF">
+    <button
+      className={styles.exportBtn}
+      onClick={handleExport}
+      aria-label="Export project report as PDF"
+    >
       📄 Export PDF
     </button>
   )
@@ -80,12 +90,14 @@ export default function ProjectDetailPage() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.titleInfo}>
-          <Link to="/dashboard" className={styles.back}>← Back</Link>
+          <Link to="/dashboard" className={styles.back}>
+            ← Back
+          </Link>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{project.name}</h1>
             {canEdit && (
-              <button 
-                className={styles.editIconBtn} 
+              <button
+                className={styles.editIconBtn}
                 onClick={() => setIsEditingProject(true)}
                 title="Edit Project Details"
               >
@@ -93,10 +105,10 @@ export default function ProjectDetailPage() {
               </button>
             )}
             <div className={styles.titleDivider} />
-            <MemberList 
-              members={project.members || []} 
-              isOwner={isOwner} 
-              onRemove={(uid) => removeMember.mutate(uid)} 
+            <MemberList
+              members={project.members || []}
+              isOwner={isOwner}
+              onRemove={uid => removeMember.mutate(uid)}
             />
             {isOwner && (
               <button className={styles.inviteBtn} onClick={() => setIsInvitingMember(true)}>
@@ -109,9 +121,7 @@ export default function ProjectDetailPage() {
         <div className={styles.badges}>
           <ThemeToggle />
           <span className={styles.role}>{project.my_role}</span>
-          {stats && (
-            <span className={styles.completion}>{stats.completion_rate}% complete</span>
-          )}
+          {stats && <span className={styles.completion}>{stats.completion_rate}% complete</span>}
           <ExportPdfButton projectId={projectId} />
         </div>
       </header>
@@ -127,14 +137,16 @@ export default function ProjectDetailPage() {
       {stats && (
         <div className={styles.statsRow}>
           {[
-            { label: 'Total',       value: stats.total,       color: '#94a3b8' },
-            { label: 'Todo',        value: stats.todo,        color: '#6366f1' },
+            { label: 'Total', value: stats.total, color: '#94a3b8' },
+            { label: 'Todo', value: stats.todo, color: '#6366f1' },
             { label: 'In Progress', value: stats.in_progress, color: '#f59e0b' },
-            { label: 'Done',        value: stats.done,        color: '#10b981' },
-            { label: 'Overdue',     value: stats.overdue,     color: '#ef4444' },
+            { label: 'Done', value: stats.done, color: '#10b981' },
+            { label: 'Overdue', value: stats.overdue, color: '#ef4444' },
           ].map(s => (
             <div key={s.label} className={styles.statPill} style={{ borderColor: s.color }}>
-              <span className={styles.statVal} style={{ color: s.color }}>{s.value}</span>
+              <span className={styles.statVal} style={{ color: s.color }}>
+                {s.value}
+              </span>
               <span className={styles.statLbl}>{s.label}</span>
             </div>
           ))}

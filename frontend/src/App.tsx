@@ -9,7 +9,7 @@ import { useThemeStore } from '@/store/themeStore'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60,       // 1 min
+      staleTime: 1000 * 60, // 1 min
       retry: 1,
     },
   },

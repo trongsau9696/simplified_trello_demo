@@ -75,7 +75,7 @@ export function useDeleteTask(projectId: number) {
       const axiosError = err as AxiosError<ApiError>
       const msg = axiosError.response?.data?.message || 'Failed to delete task'
       toast.error(msg)
-    }
+    },
   })
 }
 
@@ -102,7 +102,9 @@ export function useUpdateTask(projectId: number) {
       const axiosError = err as AxiosError<ApiError>
       const message =
         axiosError.response?.data?.message ||
-        Object.values(axiosError.response?.data?.errors ?? {}).flat().join(', ') ||
+        Object.values(axiosError.response?.data?.errors ?? {})
+          .flat()
+          .join(', ') ||
         'Failed to update task'
       toast.error(message)
     },

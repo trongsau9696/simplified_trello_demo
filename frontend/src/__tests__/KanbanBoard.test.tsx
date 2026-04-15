@@ -21,7 +21,7 @@ describe('KanbanBoard', () => {
         </QueryClientProvider>
       </BrowserRouter>
     )
-    
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
 })

@@ -12,7 +12,7 @@ const initializeEcho = () => {
   if (typeof window === 'undefined') return null
 
   window.Pusher = Pusher
-  
+
   return new Echo({
     broadcaster: 'reverb',
     key: import.meta.env.VITE_REVERB_APP_KEY ?? 'trello_key',

@@ -2,7 +2,12 @@ import api from '@/api/axios'
 import type { AuthResponse } from '@/types'
 
 export const authApi = {
-  register: async (data: { name: string; email: string; password: string; password_confirmation: string }) => {
+  register: async (data: {
+    name: string
+    email: string
+    password: string
+    password_confirmation: string
+  }) => {
     const res = await api.post<AuthResponse>('/auth/register', data)
     return res.data
   },

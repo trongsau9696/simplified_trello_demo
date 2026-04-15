@@ -101,6 +101,6 @@ export function useRemoveMember(projectId: number) {
       const axiosError = err as AxiosError<ApiError>
       const msg = axiosError.response?.data?.message || 'Failed to remove member'
       toast.error(msg)
-    }
+    },
   })
 }

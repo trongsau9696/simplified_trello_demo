@@ -16,13 +16,13 @@ export function ProjectProgress({ total, done, color = 'var(--accent)' }: Props)
         <span className={styles.label}>Progress</span>
       </div>
       <div className={styles.track}>
-        <div 
-          className={styles.bar} 
-          style={{ 
+        <div
+          className={styles.bar}
+          style={{
             width: `${percentage}%`,
             backgroundColor: color,
-            boxShadow: `0 0 10px ${color}44`
-          }} 
+            boxShadow: `0 0 10px ${color}44`,
+          }}
         />
       </div>
     </div>

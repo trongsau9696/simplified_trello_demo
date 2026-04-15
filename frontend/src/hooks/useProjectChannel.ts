@@ -29,9 +29,14 @@ export function useProjectChannel(projectId: number): void {
         const removeFrom = (arr: Task[]) => arr.filter(t => t.id !== event.id)
 
         return {
-          todo:        event.status === 'todo'        ? [...removeFrom(old.todo),        updatedTask] : removeFrom(old.todo),
-          in_progress: event.status === 'in_progress' ? [...removeFrom(old.in_progress), updatedTask] : removeFrom(old.in_progress),
-          done:        event.status === 'done'        ? [...removeFrom(old.done),        updatedTask] : removeFrom(old.done),
+          todo:
+            event.status === 'todo' ? [...removeFrom(old.todo), updatedTask] : removeFrom(old.todo),
+          in_progress:
+            event.status === 'in_progress'
+              ? [...removeFrom(old.in_progress), updatedTask]
+              : removeFrom(old.in_progress),
+          done:
+            event.status === 'done' ? [...removeFrom(old.done), updatedTask] : removeFrom(old.done),
         }
       })
     })
@@ -48,9 +53,9 @@ export function useProjectChannel(projectId: number): void {
         if (!old) return old
         const removeFrom = (arr: Task[]) => arr.filter(t => t.id !== event.id)
         return {
-          todo:        removeFrom(old.todo),
+          todo: removeFrom(old.todo),
           in_progress: removeFrom(old.in_progress),
-          done:        removeFrom(old.done),
+          done: removeFrom(old.done),
         }
       })
       toast('Task was deleted by another user')

@@ -12,22 +12,21 @@ interface TaskCardProps {
 
 const getPriorityColor = (p: Task['priority']) => {
   switch (p) {
-    case 'high': return '#ef4444'
-    case 'medium': return '#f59e0b'
-    case 'low': return '#10b981'
-    default: return '#94a3b8'
+    case 'high':
+      return '#ef4444'
+    case 'medium':
+      return '#f59e0b'
+    case 'low':
+      return '#10b981'
+    default:
+      return '#94a3b8'
   }
 }
 
 export function TaskCard({ task, isOverlay, onClick }: TaskCardProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  })
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -63,20 +62,16 @@ export function TaskCard({ task, isOverlay, onClick }: TaskCardProps) {
   )
 
   if (isOverlay) {
-    return (
-      <div className={`${styles.card} ${styles.overlay}`}>
-        {content}
-      </div>
-    )
+    return <div className={`${styles.card} ${styles.overlay}`}>{content}</div>
   }
 
   return (
-    <div 
-      ref={setNodeRef} 
-      style={style} 
-      className={styles.card} 
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={styles.card}
       onClick={() => onClick?.()}
-      {...attributes} 
+      {...attributes}
       {...listeners}
     >
       {content}

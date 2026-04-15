@@ -40,13 +40,14 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
     }
   }, [task])
 
-  if (isLoading || !task) return (
-    <div className={styles.backdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={e => e.stopPropagation()}>
-        <div className={styles.loading}>Loading task details...</div>
+  if (isLoading || !task)
+    return (
+      <div className={styles.backdrop} onClick={onClose}>
+        <div className={styles.modal} onClick={e => e.stopPropagation()}>
+          <div className={styles.loading}>Loading task details...</div>
+        </div>
       </div>
-    </div>
-  )
+    )
 
   const handleSave = () => {
     updateTask.mutate({
@@ -57,15 +58,15 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
         status,
         priority,
         assignee_id: assigneeId,
-        due_date: dueDate || null
-      }
+        due_date: dueDate || null,
+      },
     })
     setIsEditing(false)
   }
 
   const handleDelete = () => {
     deleteTask.mutate(taskId, {
-      onSuccess: () => onClose()
+      onSuccess: () => onClose(),
     })
   }
 
@@ -73,7 +74,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
     e.preventDefault()
     if (!commentText.trim()) return
     addComment.mutate(commentText, {
-      onSuccess: () => setCommentText('')
+      onSuccess: () => setCommentText(''),
     })
   }
 
@@ -86,19 +87,21 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
   const statusLabels: Record<TaskStatus, string> = {
     todo: 'To Do',
     in_progress: 'In Progress',
-    done: 'Done'
+    done: 'Done',
   }
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
-        <button className={styles.closeBtn} onClick={onClose}>&times;</button>
+        <button className={styles.closeBtn} onClick={onClose}>
+          &times;
+        </button>
 
         <header className={styles.header}>
           <div className={styles.headerTop}>
             {isEditing ? (
               <div className={styles.editGroupCol}>
-                <input 
+                <input
                   className={styles.titleInput}
                   value={title}
                   onChange={e => setTitle(e.target.value)}
@@ -118,10 +121,16 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
               )}
               {isEditing && (
                 <div className={styles.formActionsTop}>
-                  <button className={styles.btnSave} onClick={handleSave} disabled={updateTask.isPending}>
+                  <button
+                    className={styles.btnSave}
+                    onClick={handleSave}
+                    disabled={updateTask.isPending}
+                  >
                     {updateTask.isPending ? 'Saving...' : 'Save Changes'}
                   </button>
-                  <button className={styles.btnCancel} onClick={() => setIsEditing(false)}>Cancel</button>
+                  <button className={styles.btnCancel} onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </button>
                 </div>
               )}
             </div>
@@ -145,7 +154,7 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <section className={styles.section}>
               <h3>Description</h3>
               {isEditing ? (
-                <textarea 
+                <textarea
                   className={styles.descInput}
                   value={description}
                   onChange={e => setDescription(e.target.value)}
@@ -165,14 +174,14 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <section className={styles.section}>
               <h3>Activity</h3>
               <form className={styles.commentForm} onSubmit={handleAddComment}>
-                <input 
+                <input
                   className={styles.commentInput}
                   value={commentText}
                   onChange={e => setCommentText(e.target.value)}
                   placeholder="Write a comment..."
                 />
-                <button 
-                  className={styles.btnPrimary} 
+                <button
+                  className={styles.btnPrimary}
                   disabled={!commentText.trim() || addComment.isPending}
                 >
                   Send
@@ -197,14 +206,16 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <div className={styles.widget}>
               <h4>Assignee</h4>
               {isEditing ? (
-                <select 
+                <select
                   className={styles.select}
-                  value={assigneeId || ''} 
+                  value={assigneeId || ''}
                   onChange={e => setAssigneeId(Number(e.target.value) || null)}
                 >
                   <option value="">Unassigned</option>
                   {(members || []).map(m => (
-                    <option key={m.id} value={m.id}>{m.name}</option>
+                    <option key={m.id} value={m.id}>
+                      {m.name}
+                    </option>
                   ))}
                 </select>
               ) : (
@@ -224,9 +235,9 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <div className={styles.widget}>
               <h4>Priority</h4>
               {isEditing ? (
-                <select 
+                <select
                   className={styles.select}
-                  value={priority} 
+                  value={priority}
                   onChange={e => setPriority(e.target.value as TaskPriority)}
                 >
                   <option value="low">Low</option>
@@ -234,7 +245,9 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
                   <option value="high">High</option>
                 </select>
               ) : (
-                <span className={`${styles.sideValue} ${styles.capitalize} ${getPriorityClass(task.priority)}`}>
+                <span
+                  className={`${styles.sideValue} ${styles.capitalize} ${getPriorityClass(task.priority)}`}
+                >
                   {task.priority}
                 </span>
               )}
@@ -243,8 +256,8 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
             <div className={styles.widget}>
               <h4>Due Date</h4>
               {isEditing ? (
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   className={styles.dateInput}
                   value={dueDate}
                   onChange={e => setDueDate(e.target.value)}
@@ -272,17 +285,14 @@ export function TaskModal({ taskId, projectId, onClose, members, canEdit }: Task
               <h3>Delete Task?</h3>
               <p>Are you sure you want to delete this task? This action cannot be undone.</p>
               <div className={styles.confirmDeleteActions}>
-                <button 
-                  className={styles.confirmDeleteBtn} 
+                <button
+                  className={styles.confirmDeleteBtn}
                   onClick={handleDelete}
                   disabled={deleteTask.isPending}
                 >
                   {deleteTask.isPending ? 'Deleting...' : 'Confirm Delete'}
                 </button>
-                <button 
-                  className={styles.cancelDeleteBtn} 
-                  onClick={() => setIsDeleting(false)}
-                >
+                <button className={styles.cancelDeleteBtn} onClick={() => setIsDeleting(false)}>
                   Cancel
                 </button>
               </div>

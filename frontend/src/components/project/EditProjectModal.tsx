@@ -40,10 +40,12 @@ export function EditProjectModal({ project, onClose }: Props) {
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>Edit Project Settings</h2>
-          <button className={styles.closeBtn} onClick={onClose}>×</button>
+          <button className={styles.closeBtn} onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -74,11 +76,7 @@ export function EditProjectModal({ project, onClose }: Props) {
             <button type="button" onClick={onClose} className={styles.cancelBtn}>
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={updateProject.isPending}
-              className={styles.saveBtn}
-            >
+            <button type="submit" disabled={updateProject.isPending} className={styles.saveBtn}>
               {updateProject.isPending ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
